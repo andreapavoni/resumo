@@ -1,0 +1,19 @@
+<div class="education-entry entry-group" id="education-entry-{{ index }}">
+  <div class="entry-header">
+    <span class="entry-title">Education #{{ index + 1 }}</span>
+    <button type="button"
+            hx-post="/entry/remove"
+            hx-target="#education-entry-{{ index }}"
+            hx-swap="outerHTML">Remove</button>
+  </div>
+  <label>Institution <input type="text" name="education[{{ index }}].institution" /></label>
+  <div class="field-row">
+    <label>Degree Type <input type="text" name="education[{{ index }}].study_type" placeholder="B.Sc., M.Sc., Ph.D." /></label>
+    <label>Field of Study <input type="text" name="education[{{ index }}].area" /></label>
+  </div>
+  <div class="field-row">
+    <label>Start Date <input type="month" name="education[{{ index }}].start_date" /></label>
+    <label>End Date <input type="month" name="education[{{ index }}].end_date" /></label>
+  </div>
+  <label>GPA/Score <input type="text" name="education[{{ index }}].score" /></label>
+</div>

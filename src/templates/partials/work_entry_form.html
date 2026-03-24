@@ -1,0 +1,20 @@
+<div class="work-entry entry-group" id="work-entry-{{ index }}">
+  <div class="entry-header">
+    <span class="entry-title">Work #{{ index + 1 }}</span>
+    <button type="button"
+            hx-post="/entry/remove"
+            hx-target="#work-entry-{{ index }}"
+            hx-swap="outerHTML">Remove</button>
+  </div>
+  <div class="field-row">
+    <label>Position <input type="text" name="work[{{ index }}].position" /></label>
+    <label>Company <input type="text" name="work[{{ index }}].name" /></label>
+  </div>
+  <label>Location <input type="text" name="work[{{ index }}].location" /></label>
+  <div class="field-row">
+    <label>Start Date <input type="month" name="work[{{ index }}].start_date" /></label>
+    <label>End Date <input type="month" name="work[{{ index }}].end_date" /></label>
+  </div>
+  <label>Summary <textarea name="work[{{ index }}].summary" rows="2"></textarea></label>
+  <label>Highlights (one per line) <textarea name="work[{{ index }}].highlights" rows="3"></textarea></label>
+</div>

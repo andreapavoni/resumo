@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="editor-layout no-print">
+  <h1 class="app-title">Resumo</h1>
+
+  <form id="resume-form"
+        hx-post="/preview"
+        hx-target="#preview-pane"
+        hx-swap="innerHTML"
+        hx-trigger="input changed delay:400ms from:find input, input changed delay:400ms from:find textarea">
+
+    <!-- Basics (fixed/always visible) -->
+    <fieldset>
+      <legend>Personal Information</legend>
+      <label>Full Name <input type="text" name="basics.name" placeholder="Jane Doe" /></label>
+      <label>Title <input type="text" name="basics.label" placeholder="Software Engineer" /></label>
+      <label>Email <input type="email" name="basics.email" placeholder="jane@example.com" /></label>
+      <label>Phone <input type="text" name="basics.phone" placeholder="+1 555 123 4567" /></label>
+      <label>Website <input type="url" name="basics.url" placeholder="https://janedoe.dev" /></label>
+      <div class="field-row">
+        <label>City <input type="text" name="basics.location.city" placeholder="San Francisco" /></label>
+        <label>Region <input type="text" name="basics.location.region" placeholder="CA" /></label>
+        <label>Country <input type="text" name="basics.location.country_code" placeholder="US" /></label>
+      </div>
+      <label>Summary <textarea name="basics.summary" rows="3" placeholder="A brief professional summary..."></textarea></label>
+    </fieldset>
+
+    <!-- Work Experience (repeatable, starts empty) -->
+    <fieldset>
+      <legend>Work Experience</legend>
+      <div id="work-entries"></div>
+      <input type="hidden" name="work_count" id="work-count" value="0" />
+      <button type="button"
+              hx-post="/entry/add?section=work"
+              hx-target="#work-entries"
+              hx-swap="beforeend"
+              hx-include="#work-count">
+        + Add Work Experience
+      </button>
+    </fieldset>
+
+    <!-- Education (repeatable, starts empty) -->
+    <fieldset>
+      <legend>Education</legend>
+      <div id="education-entries"></div>
+      <input type="hidden" name="education_count" id="education-count" value="0" />
+      <button type="button"
+              hx-post="/entry/add?section=education"
+              hx-target="#education-entries"
+              hx-swap="beforeend"
+              hx-include="#education-count">
+        + Add Education
+      </button>
+    </fieldset>
+
+    <!-- Skills (repeatable, starts empty) -->
+    <fieldset>
+      <legend>Skills</legend>
+      <div id="skills-entries"></div>
+      <input type="hidden" name="skills_count" id="skills-count" value="0" />
+      <button type="button"
+              hx-post="/entry/add?section=skills"
+              hx-target="#skills-entries"
+              hx-swap="beforeend"
+              hx-include="#skills-count">
+        + Add Skill Group
+      </button>
+    </fieldset>
+  </form>
+
+  <form id="export-form" action="/export.json" method="post" target="_blank" class="export-bar">
+    <button type="submit" hx-include="#resume-form" class="btn-export">Export JSON</button>
+  </form>
+</div>
+
+<div id="preview-pane" class="preview-pane">
+  <p class="placeholder">Your resume preview will appear here as you type...</p>
+</div>
+{% endblock %}
