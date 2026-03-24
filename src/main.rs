@@ -1,18 +1,11 @@
-use axum::{routing::get, routing::post, Router};
-use tower_http::services::ServeDir;
-
-mod handlers;
-mod models;
+use axum::{routing::post, Router};
+use tower_http::services::{ServeDir, ServeFile};
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(handlers::editor_page))
-        .route("/preview", post(handlers::preview))
-        .route("/entry/add", post(handlers::add_entry))
-        .route("/entry/remove", post(handlers::remove_entry))
-        .route("/export.json", post(handlers::export_json))
-        .nest_service("/static", ServeDir::new("static"));
+        .route("/api/render", post(resumo::handlers::render_resume))
+        .fallback_service(ServeDir::new("static").fallback(ServeFile::new("static/index.html")));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await
