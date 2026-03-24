@@ -143,6 +143,33 @@ async fn renders_work_highlights() {
 }
 
 #[tokio::test]
+async fn dates_display_human_readable() {
+    let (_, html) = post_render(&serde_json::json!({
+        "work": [{
+            "position": "Engineer",
+            "startDate": "2022-11",
+            "endDate": "2024-03"
+        }]
+    }))
+    .await;
+    assert!(html.contains("Nov 2022"), "Start date should display as 'Nov 2022'");
+    assert!(html.contains("Mar 2024"), "End date should display as 'Mar 2024'");
+}
+
+#[tokio::test]
+async fn missing_end_date_shows_present() {
+    let (_, html) = post_render(&serde_json::json!({
+        "work": [{
+            "position": "Engineer",
+            "startDate": "2023-01"
+        }]
+    }))
+    .await;
+    assert!(html.contains("Jan 2023"));
+    assert!(html.contains("Present"));
+}
+
+#[tokio::test]
 async fn invalid_json_returns_error() {
     let req = Request::post("/api/render")
         .header("content-type", "application/json")

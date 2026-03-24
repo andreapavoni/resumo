@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { TagInput } from "./TagInput.js";
+import { ListInput } from "./ListInput.js";
 import type { Work } from "../types.js";
 
 interface WorkSectionProps {
@@ -57,11 +57,22 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
                 <input type="month" value=${job.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(work, i, { startDate: val(e) }))} />
               </label>
-              <label>
-                End Date
-                <input type="month" value=${job.endDate ?? ""}
-                  onChange=${(e: Event) => onChange(update(work, i, { endDate: val(e) }))} />
-              </label>
+              <div class="date-field">
+                <label>
+                  End Date
+                  <input type="month" value=${job.endDate ?? ""}
+                    disabled=${job.endDate === undefined}
+                    onChange=${(e: Event) => onChange(update(work, i, { endDate: val(e) }))} />
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked=${job.endDate === undefined}
+                    onChange=${(e: Event) => {
+                      const current = (e.target as HTMLInputElement).checked;
+                      onChange(update(work, i, { endDate: current ? undefined : "" }));
+                    }} />
+                  Current position
+                </label>
+              </div>
             </div>
             <label>
               Summary
@@ -71,9 +82,8 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
             </label>
             <label>
               Highlights
-              <${TagInput}
+              <${ListInput}
                 items=${job.highlights ?? []}
-                placeholder="Add a bullet point and press Enter"
                 onChange=${(items: string[]) => onChange(update(work, i, { highlights: items }))}
               />
             </label>

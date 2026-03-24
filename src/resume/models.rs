@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use super::date::ResumeDate;
+
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Resume {
@@ -35,8 +37,8 @@ pub struct Work {
     pub name: Option<String>,
     pub location: Option<String>,
     pub position: Option<String>,
-    pub start_date: Option<String>,
-    pub end_date: Option<String>,
+    pub start_date: Option<ResumeDate>,
+    pub end_date: Option<ResumeDate>,
     pub summary: Option<String>,
     pub highlights: Option<Vec<String>>,
 }
@@ -47,8 +49,8 @@ pub struct Education {
     pub institution: Option<String>,
     pub area: Option<String>,
     pub study_type: Option<String>,
-    pub start_date: Option<String>,
-    pub end_date: Option<String>,
+    pub start_date: Option<ResumeDate>,
+    pub end_date: Option<ResumeDate>,
     pub score: Option<String>,
 }
 

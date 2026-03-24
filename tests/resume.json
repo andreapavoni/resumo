@@ -1,0 +1,70 @@
+{
+  "basics": {
+    "name": "John Doe",
+    "label": "Hotel Receptionist",
+    "email": "jdoe@example.com",
+    "phone": "+12 3456789",
+    "location": {
+      "city": "Rome",
+      "region": "Lazio",
+      "countryCode": "IT"
+    },
+    "summary": "After 15+ years in software engineering, I'm making a deliberate move toward hospitality.\n\nI'm an extrovert who genuinely enjoys people and thrives in face-to-face interactions — something remote work doesn't offer.\n\nI'm mature, calm under pressure, reliable by nature, and a fast learner in any new environment.\n\nI speak fluent English and Italian, and I bring a background in communication and problem-solving that translates well to a guest-facing role.",
+    "url": "https://example.com"
+  },
+  "work": [
+    {
+      "position": "Software Engineer",
+      "name": "ACME Inc",
+      "location": "Remote",
+      "startDate": "2024-11",
+      "endDate": "2026-02",
+      "summary": "software engineering, I'm making a deliberate move toward hospitality. I'm an extrovert who genuinely enjoys people and t",
+      "highlights": [
+        "killed a dinosaur"
+      ]
+    },
+    {
+      "position": "Hotel Receptionist / Front Office",
+      "name": "Hotel Romanus",
+      "location": "Rome",
+      "startDate": "2026-03",
+      "summary": "I speak fluent English and Italian, and I bring a background in communication and problem-solving that translates well to a guest-facing role.",
+      "highlights": [
+        "customer facing activities",
+        "payment handling",
+        "check-in/check-out"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Università degli Studi di Roma, La Sapienza",
+      "studyType": "Bachelor Degree",
+      "area": "Sociology",
+      "startDate": "1997-11",
+      "endDate": "2024-02"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Advanced",
+      "keywords": [
+        "ruby",
+        "elixir",
+        "rust",
+        "go",
+        "html"
+      ]
+    },
+    {
+      "name": "Soft skills",
+      "level": "Advanced",
+      "keywords": [
+        "people",
+        "problem solving"
+      ]
+    }
+  ]
+}

@@ -54,9 +54,15 @@
           {% endif %}
         </h3>
         <p class="date-range">
-          <time>{{ job.start_date.as_deref().unwrap_or("") }}</time>
+          {% match job.start_date %}
+            {% when Some with (d) %}<time>{{ d }}</time>
+            {% when None %}
+          {% endmatch %}
           –
-          <time>{{ job.end_date.as_deref().unwrap_or("Present") }}</time>
+          {% match job.end_date %}
+            {% when Some with (d) %}<time>{{ d }}</time>
+            {% when None %}Present
+          {% endmatch %}
         </p>
       </header>
       {% if let Some(summary) = job.summary %}
@@ -92,9 +98,15 @@
           <p class="org">{{ inst }}</p>
         {% endif %}
         <p class="date-range">
-          <time>{{ edu.start_date.as_deref().unwrap_or("") }}</time>
+          {% match edu.start_date %}
+            {% when Some with (d) %}<time>{{ d }}</time>
+            {% when None %}
+          {% endmatch %}
           –
-          <time>{{ edu.end_date.as_deref().unwrap_or("Present") }}</time>
+          {% match edu.end_date %}
+            {% when Some with (d) %}<time>{{ d }}</time>
+            {% when None %}Present
+          {% endmatch %}
         </p>
       </header>
       {% if let Some(score) = edu.score %}

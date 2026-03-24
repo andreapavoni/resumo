@@ -56,11 +56,22 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
                 <input type="month" value=${edu.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(education, i, { startDate: val(e) }))} />
               </label>
-              <label>
-                End Date
-                <input type="month" value=${edu.endDate ?? ""}
-                  onChange=${(e: Event) => onChange(update(education, i, { endDate: val(e) }))} />
-              </label>
+              <div class="date-field">
+                <label>
+                  End Date
+                  <input type="month" value=${edu.endDate ?? ""}
+                    disabled=${edu.endDate === undefined}
+                    onChange=${(e: Event) => onChange(update(education, i, { endDate: val(e) }))} />
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked=${edu.endDate === undefined}
+                    onChange=${(e: Event) => {
+                      const current = (e.target as HTMLInputElement).checked;
+                      onChange(update(education, i, { endDate: current ? undefined : "" }));
+                    }} />
+                  Current
+                </label>
+              </div>
             </div>
             <label>
               GPA / Score
