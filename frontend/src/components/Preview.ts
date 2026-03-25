@@ -1,13 +1,14 @@
 import { html } from "htm/preact";
 import { useState, useEffect, useRef } from "preact/hooks";
 import { renderResume } from "../api.js";
-import type { Resume } from "../types.js";
+import type { Resume, Theme } from "../types.js";
 
 interface PreviewProps {
   resume: Resume;
+  theme: Theme;
 }
 
-export function Preview({ resume }: PreviewProps) {
+export function Preview({ resume, theme }: PreviewProps) {
   const [previewHtml, setPreviewHtml] = useState<string>("");
   const abortRef = useRef<AbortController | null>(null);
 
@@ -18,7 +19,7 @@ export function Preview({ resume }: PreviewProps) {
       abortRef.current = controller;
 
       try {
-        const html = await renderResume(resume, controller.signal);
+        const html = await renderResume(resume, theme, controller.signal);
         setPreviewHtml(html);
       } catch (err) {
         if (err instanceof Error && err.name !== "AbortError") {
@@ -28,7 +29,7 @@ export function Preview({ resume }: PreviewProps) {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [resume]);
+  }, [resume, theme]);
 
   if (!previewHtml) {
     return html`<p class="placeholder">Your resume preview will appear here as you type...</p>`;

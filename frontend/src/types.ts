@@ -8,12 +8,15 @@ export interface Resume {
 export interface Basics {
   name?: string;
   label?: string;
+  image?: string;
   email?: string;
   phone?: string;
   url?: string;
   summary?: string;
   location?: Location;
 }
+
+export type Theme = "classic" | "modern";
 
 export interface Location {
   city?: string;

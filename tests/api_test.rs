@@ -7,8 +7,12 @@ fn app() -> Router {
 }
 
 async fn post_render(json: &serde_json::Value) -> (u16, String) {
+    post_render_themed(json, "classic").await
+}
+
+async fn post_render_themed(json: &serde_json::Value, theme: &str) -> (u16, String) {
     let body = serde_json::to_string(json).unwrap();
-    let req = Request::post("/api/render")
+    let req = Request::post(format!("/api/render?theme={theme}"))
         .header("content-type", "application/json")
         .body(Body::from(body))
         .unwrap();
@@ -167,6 +171,46 @@ async fn missing_end_date_shows_present() {
     .await;
     assert!(html.contains("Jan 2023"));
     assert!(html.contains("Present"));
+}
+
+#[tokio::test]
+async fn renders_profile_image() {
+    let (_, html) = post_render(&serde_json::json!({
+        "basics": {
+            "name": "Jane",
+            "image": "data:image/png;base64,abc123"
+        }
+    }))
+    .await;
+    assert!(html.contains(r#"<img class="resume-photo""#));
+    assert!(html.contains("data:image/png;base64,abc123"));
+}
+
+#[tokio::test]
+async fn modern_theme_returns_200() {
+    let (status, html) = post_render_themed(
+        &serde_json::json!({
+            "basics": { "name": "Jane Doe", "label": "Engineer" }
+        }),
+        "modern",
+    )
+    .await;
+    assert_eq!(status, 200);
+    assert!(html.contains("Jane Doe"));
+    assert!(html.contains("sidebar"), "Modern theme should have a sidebar");
+}
+
+#[tokio::test]
+async fn modern_theme_renders_skills_as_pills() {
+    let (_, html) = post_render_themed(
+        &serde_json::json!({
+            "skills": [{ "name": "Languages", "keywords": ["Rust", "Python"] }]
+        }),
+        "modern",
+    )
+    .await;
+    assert!(html.contains(r#"class="pill""#));
+    assert!(html.contains("Rust"));
 }
 
 #[tokio::test]

@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useState } from "preact/hooks";
 import { Editor } from "./components/Editor.js";
 import { Preview } from "./components/Preview.js";
-import type { Resume } from "./types.js";
+import type { Resume, Theme } from "./types.js";
 
 function importJson(setResume: (r: Resume) => void) {
   const input = document.createElement("input");
@@ -39,11 +39,16 @@ function exportJson(resume: Resume) {
 
 export function App() {
   const [resume, setResume] = useState<Resume>({});
+  const [theme, setTheme] = useState<Theme>("classic");
 
   return html`
     <div class="editor-layout no-print">
       <h1 class="app-title">Resumo</h1>
       <div class="toolbar">
+        <select value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
+          <option value="classic">Classic</option>
+          <option value="modern">Modern</option>
+        </select>
         <button onClick=${() => importJson(setResume)}>Import JSON</button>
         <button class="btn-primary" onClick=${() => exportJson(resume)}>Export JSON</button>
         <button onClick=${() => window.print()}>Print / Save PDF</button>
@@ -51,7 +56,7 @@ export function App() {
       <${Editor} resume=${resume} onChange=${setResume} />
     </div>
     <div class="preview-pane">
-      <${Preview} resume=${resume} />
+      <${Preview} resume=${resume} theme=${theme} />
     </div>
   `;
 }

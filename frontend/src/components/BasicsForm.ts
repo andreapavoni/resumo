@@ -1,4 +1,5 @@
 import { html } from "htm/preact";
+import { useRef } from "preact/hooks";
 import type { Basics, Location } from "../types.js";
 
 interface BasicsFormProps {
@@ -20,10 +21,43 @@ function val(e: Event): string {
 
 export function BasicsForm({ basics, onChange }: BasicsFormProps) {
   const loc = basics.location ?? {};
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  function handlePhoto() {
+    fileRef.current?.click();
+  }
+
+  function onFileChange(e: Event) {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      onChange(set(basics, { image: reader.result as string }));
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removePhoto() {
+    onChange(set(basics, { image: undefined }));
+    if (fileRef.current) fileRef.current.value = "";
+  }
 
   return html`
     <fieldset>
       <legend>Personal Information</legend>
+      <div class="photo-input">
+        <input ref=${fileRef} type="file" accept="image/*" class="sr-only" onChange=${onFileChange} />
+        ${basics.image
+          ? html`
+            <img class="photo-thumb" src=${basics.image} alt="Profile" />
+            <div class="photo-actions">
+              <button type="button" onClick=${handlePhoto}>Change Photo</button>
+              <button type="button" onClick=${removePhoto}>Remove</button>
+            </div>
+          `
+          : html`<button type="button" onClick=${handlePhoto}>Add Profile Photo</button>`
+        }
+      </div>
       <label>
         Full Name
         <input type="text" value=${basics.name ?? ""} placeholder="Jane Doe"

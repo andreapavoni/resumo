@@ -16,6 +16,7 @@ pub struct Resume {
 pub struct Basics {
     pub name: Option<String>,
     pub label: Option<String>,
+    pub image: Option<String>,
     pub email: Option<String>,
     pub phone: Option<String>,
     pub url: Option<String>,
