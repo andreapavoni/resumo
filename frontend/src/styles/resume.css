@@ -37,7 +37,8 @@
     break-inside: avoid;
   }
 
-  h2, h3 {
+  h2,
+  h3 {
     page-break-after: avoid;
     break-after: avoid;
   }
@@ -47,7 +48,8 @@
     break-inside: avoid;
   }
 
-  p, li {
+  p,
+  li {
     orphans: 3;
     widows: 3;
   }
