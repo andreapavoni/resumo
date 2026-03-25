@@ -14,6 +14,13 @@ function val(e: Event): string {
   return (e.target as HTMLInputElement).value;
 }
 
+function move<T>(arr: T[], from: number, to: number): T[] {
+  const result = [...arr];
+  const [item] = result.splice(from, 1);
+  result.splice(to, 0, item);
+  return result;
+}
+
 export function EducationSection({ education, onChange }: EducationSectionProps) {
   function addEntry() {
     onChange([...education, {}]);
@@ -31,7 +38,13 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
           <div class="entry-group" key=${i}>
             <div class="entry-header">
               <span class="entry-title">Education #${i + 1}</span>
-              <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              <div class="entry-controls">
+                <button type="button" class="btn-icon" disabled=${i === 0}
+                  onClick=${() => onChange(move(education, i, i - 1))}>↑</button>
+                <button type="button" class="btn-icon" disabled=${i === education.length - 1}
+                  onClick=${() => onChange(move(education, i, i + 1))}>↓</button>
+                <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              </div>
             </div>
             <label>
               Institution

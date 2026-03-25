@@ -15,6 +15,13 @@ function val(e: Event): string {
   return (e.target as HTMLInputElement).value;
 }
 
+function move<T>(arr: T[], from: number, to: number): T[] {
+  const result = [...arr];
+  const [item] = result.splice(from, 1);
+  result.splice(to, 0, item);
+  return result;
+}
+
 export function WorkSection({ work, onChange }: WorkSectionProps) {
   function addEntry() {
     onChange([...work, {}]);
@@ -32,7 +39,13 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
           <div class="entry-group" key=${i}>
             <div class="entry-header">
               <span class="entry-title">Work #${i + 1}</span>
-              <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              <div class="entry-controls">
+                <button type="button" class="btn-icon" disabled=${i === 0}
+                  onClick=${() => onChange(move(work, i, i - 1))}>↑</button>
+                <button type="button" class="btn-icon" disabled=${i === work.length - 1}
+                  onClick=${() => onChange(move(work, i, i + 1))}>↓</button>
+                <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              </div>
             </div>
             <div class="field-row">
               <label>

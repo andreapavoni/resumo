@@ -5,7 +5,8 @@ use tower_http::services::{ServeDir, ServeFile};
 async fn main() {
     let app = Router::new()
         .route("/api/render", post(resumo::handlers::render_resume))
-        .fallback_service(ServeDir::new("static").fallback(ServeFile::new("static/index.html")));
+        .route_service("/app", ServeFile::new("static/app.html"))
+        .fallback_service(ServeDir::new("static").fallback(ServeFile::new("static/app.html")));
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await

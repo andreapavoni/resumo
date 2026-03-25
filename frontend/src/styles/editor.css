@@ -161,6 +161,24 @@ input:focus, textarea:focus {
   color: var(--color-heading);
 }
 
+.entry-controls {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.btn-icon {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  min-width: unset;
+}
+
+.btn-icon:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
 button {
   cursor: pointer;
   font-family: var(--font-ui);
@@ -289,17 +307,48 @@ fieldset > button {
 .list-input-text {
   flex: 1;
   color: var(--color-text);
+  cursor: text;
+  padding: 0.1rem 0.2rem;
+  border-radius: 2px;
+}
+
+.list-input-text:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.list-input-edit {
+  flex: 1;
+  border: 1px solid var(--color-accent);
+  border-radius: 3px;
+  padding: 0.1rem 0.2rem;
+  font-size: 0.875rem;
+  font-family: var(--font-ui);
+  color: var(--color-text);
+  outline: none;
+  width: auto;
+  margin-top: 0;
+}
+
+.list-input-controls {
+  display: flex;
+  gap: 0.15rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.list-input-controls .btn-icon {
+  padding: 0.1rem 0.3rem;
+  font-size: 0.7rem;
 }
 
 .list-input-remove {
   border: none;
   background: none;
   color: var(--color-muted);
-  padding: 0;
+  padding: 0 0.15rem;
   font-size: 0.9rem;
   line-height: 1;
   cursor: pointer;
-  flex-shrink: 0;
 }
 
 .list-input-remove:hover {

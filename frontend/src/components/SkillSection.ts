@@ -15,6 +15,13 @@ function val(e: Event): string {
   return (e.target as HTMLInputElement).value;
 }
 
+function move<T>(arr: T[], from: number, to: number): T[] {
+  const result = [...arr];
+  const [item] = result.splice(from, 1);
+  result.splice(to, 0, item);
+  return result;
+}
+
 export function SkillSection({ skills, onChange }: SkillSectionProps) {
   function addEntry() {
     onChange([...skills, {}]);
@@ -32,7 +39,13 @@ export function SkillSection({ skills, onChange }: SkillSectionProps) {
           <div class="entry-group" key=${i}>
             <div class="entry-header">
               <span class="entry-title">Skill Group #${i + 1}</span>
-              <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              <div class="entry-controls">
+                <button type="button" class="btn-icon" disabled=${i === 0}
+                  onClick=${() => onChange(move(skills, i, i - 1))}>↑</button>
+                <button type="button" class="btn-icon" disabled=${i === skills.length - 1}
+                  onClick=${() => onChange(move(skills, i, i + 1))}>↓</button>
+                <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
+              </div>
             </div>
             <div class="field-row">
               <label>
