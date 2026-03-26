@@ -2,6 +2,8 @@
 
 A fast, lightweight, ATS-friendly resume builder. Semantic HTML output, browser-native PDF export via Print.
 
+**[TRY IT](https://re-sumo.fly.dev)**
+
 ## Tech Stack
 
 - **Backend:** Rust, Axum, Askama (server-side HTML rendering)

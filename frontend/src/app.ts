@@ -93,7 +93,7 @@ export function App() {
         <div class="h-full grid grid-cols-3 items-center">
           <div></div>
           <div class="text-gray-500 text-xs font-medium text-center  sm:block">
-            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resume" class="text-black hover:underline">src</a> - No data about the requests is captured or stored.
+            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resumo" class="text-black hover:underline">src</a> - No data about the requests is captured or stored.
           </div>
           <div class="flex justify-end">
             <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">← Home</a>
