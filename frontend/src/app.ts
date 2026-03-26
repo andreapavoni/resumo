@@ -49,10 +49,18 @@ function exportJson(resume: Resume) {
   URL.revokeObjectURL(url);
 }
 
+declare const lucide: any;
+
 export function App() {
   const [resume, setResume] = useState<Resume>(() => loadState(STORAGE_KEY, {}));
   const [theme, setTheme] = useState<Theme>(() => loadState(THEME_KEY, "classic"));
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+
+  useEffect(() => {
+    if (typeof lucide !== "undefined") {
+      lucide.createIcons();
+    }
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -67,31 +75,77 @@ export function App() {
 
       <!-- Header -->
       <header class="no-print border-b-2 border-black bg-white sticky top-0 z-50">
-        <div class="px-4 md:px-6 py-3 md:py-0 md:h-16 flex flex-wrap items-center justify-between gap-2">
+        <div class="px-4 md:px-6 h-16 flex items-center justify-between gap-2">
           <!-- Left: Logo -->
           <a href="/" class="flex items-center gap-2 shrink-0">
             <div class="w-7 h-7 bg-black text-white flex items-center justify-center font-bold text-lg rounded-sm">R</div>
-            <span class="font-extrabold text-xl tracking-tight">Resumo</span>
+            <span class="font-extrabold text-xl tracking-tight hidden sm:inline">Resumo</span>
           </a>
-          <!-- Right: Mobile toggle (visible only on mobile) -->
-          <div class="flex md:hidden gap-1 shrink-0">
+
+          <!-- Center: Mobile toggle (visible only on mobile) -->
+          <div class="flex md:hidden bg-gray-100 p-1 rounded-sm border border-black/10 shrink-0">
             <button
-              class="${activeTab === "edit" ? "bg-appaccent text-white border-appaccent font-bold" : ""}"
-              onClick=${() => setActiveTab("edit")}>Edit</button>
+              class="flex items-center gap-1.5 px-3 py-1 rounded-sm transition-colors ${activeTab === "edit" ? "bg-white shadow-sm font-bold text-appaccent" : "text-gray-500 border-none bg-transparent hover:bg-black/5"}"
+              onClick=${() => setActiveTab("edit")}
+              aria-label="Edit Mode"
+            >
+              <i data-lucide="edit-3" class="w-4 h-4"></i>
+            </button>
             <button
-              class="${activeTab === "preview" ? "bg-appaccent text-white border-appaccent font-bold" : ""}"
-              onClick=${() => setActiveTab("preview")}>Preview</button>
+              class="flex items-center gap-1.5 px-3 py-1 rounded-sm transition-colors ${activeTab === "preview" ? "bg-white shadow-sm font-bold text-appaccent" : "text-gray-500 border-none bg-transparent hover:bg-black/5"}"
+              onClick=${() => setActiveTab("preview")}
+              aria-label="Preview Mode"
+            >
+              <i data-lucide="eye" class="w-4 h-4"></i>
+            </button>
           </div>
-          <!-- Right: Toolbar (always visible, wraps on mobile) -->
-          <nav class="flex items-center gap-2 order-last md:order-none w-full md:w-auto">
-            <select aria-label="Resume theme" value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
-              <option value="classic">Classic</option>
-              <option value="modern">Modern</option>
-            </select>
-            <div class="w-px h-5 bg-black/20 hidden md:block"></div>
-            <button onClick=${() => importJson(setResume)}>Import</button>
-            <button class="bg-appaccent text-white border-appaccent font-bold hover:opacity-90" onClick=${() => exportJson(resume)}>Export</button>
-            <button onClick=${() => window.print()}>Print</button>
+
+          <!-- Right: Toolbar -->
+          <nav class="flex items-center gap-1.5 md:gap-3">
+            <div class="relative flex items-center group">
+               <i data-lucide="palette" class="w-4 h-4 absolute left-2 text-gray-400 pointer-events-none"></i>
+               <select
+                 aria-label="Resume theme"
+                 value=${theme}
+                 onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}
+                 class="pl-7 pr-2 py-1.5 text-xs font-bold uppercase tracking-wider border-2 border-black rounded-sm bg-white cursor-pointer hover:bg-gray-50"
+               >
+                 <option value="classic">Classic</option>
+                 <option value="modern">Modern</option>
+               </select>
+            </div>
+
+            <div class="w-px h-6 bg-black/10 hidden md:block mx-1"></div>
+
+            <button
+              class="flex items-center gap-2 hover:text-appaccent transition-colors"
+              onClick=${() => importJson(setResume)}
+              title="Import JSON"
+              aria-label="Import JSON"
+            >
+              <i data-lucide="file-up" class="w-4 h-4"></i>
+              <span class="hidden lg:inline">Import</span>
+            </button>
+
+            <button
+              class="flex items-center gap-2 bg-appaccent text-white border-appaccent font-bold hover:opacity-90 transition-opacity"
+              onClick=${() => exportJson(resume)}
+              title="Export JSON"
+              aria-label="Export JSON"
+            >
+              <i data-lucide="file-down" class="w-4 h-4"></i>
+              <span class="hidden lg:inline">Export</span>
+            </button>
+
+            <button
+              class="flex items-center gap-2 hover:text-appaccent transition-colors"
+              onClick=${() => window.print()}
+              title="Print to PDF"
+              aria-label="Print to PDF"
+            >
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span class="hidden lg:inline">Print</span>
+            </button>
           </nav>
         </div>
       </header>
