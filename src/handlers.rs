@@ -1,5 +1,5 @@
 use askama::Template;
-use axum::{Json, extract::Query, response::Html};
+use axum::{Json, extract::Query, http::StatusCode, response::Html};
 use serde::Deserialize;
 
 use crate::resume::models::Resume;
@@ -26,9 +26,9 @@ macro_rules! theme_templates {
             struct $variant { resume: Resume }
         )+
 
-        fn render_themed(theme: Theme, resume: Resume) -> String {
+        fn render_themed(theme: Theme, resume: Resume) -> Result<String, askama::Error> {
             match theme {
-                $(Theme::$variant => $variant { resume }.render().unwrap(),)+
+                $(Theme::$variant => $variant { resume }.render(),)+
             }
         }
     };
@@ -42,7 +42,7 @@ theme_templates! {
 pub async fn render_resume(
     Query(query): Query<RenderQuery>,
     Json(mut resume): Json<Resume>,
-) -> Html<String> {
+) -> Result<Html<String>, StatusCode> {
     if let Some(ref mut work) = resume.work {
         work.sort_by(|a, b| b.start_date.cmp(&a.start_date));
     }
@@ -50,5 +50,8 @@ pub async fn render_resume(
         edu.sort_by(|a, b| b.start_date.cmp(&a.start_date));
     }
 
-    Html(render_themed(query.theme, resume))
+    render_themed(query.theme, resume).map(Html).map_err(|err| {
+        tracing::error!(%err, "template render failed");
+        StatusCode::INTERNAL_SERVER_ERROR
+    })
 }
