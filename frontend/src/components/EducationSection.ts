@@ -35,13 +35,13 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
       <legend>Education</legend>
       ${education.map(
         (edu, i) => html`
-          <div class="entry-group" key=${i}>
-            <div class="entry-header">
-              <span class="entry-title">Education #${i + 1}</span>
-              <div class="entry-controls">
-                <button type="button" class="btn-icon" disabled=${i === 0}
+          <div class="border border-gray-200 rounded p-3 mb-3 bg-gray-50" key=${i}>
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-semibold text-sm">Education #${i + 1}</span>
+              <div class="flex gap-1 items-center">
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(education, i, i - 1))}>↑</button>
-                <button type="button" class="btn-icon" disabled=${i === education.length - 1}
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === education.length - 1}
                   onClick=${() => onChange(move(education, i, i + 1))}>↓</button>
                 <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
               </div>
@@ -51,7 +51,7 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
               <input type="text" value=${edu.institution ?? ""} placeholder="University of Example"
                 onInput=${(e: Event) => onChange(update(education, i, { institution: val(e) }))} />
             </label>
-            <div class="field-row">
+            <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Degree
                 <input type="text" value=${edu.studyType ?? ""} placeholder="B.Sc., M.Sc., Ph.D."
@@ -63,20 +63,20 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
                   onInput=${(e: Event) => onChange(update(education, i, { area: val(e) }))} />
               </label>
             </div>
-            <div class="field-row">
+            <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Start Date
                 <input type="month" value=${edu.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(education, i, { startDate: val(e) }))} />
               </label>
-              <div class="date-field">
+              <div class="flex-1">
                 <label>
                   End Date
                   <input type="month" value=${edu.endDate ?? ""}
                     disabled=${edu.endDate === undefined}
                     onChange=${(e: Event) => onChange(update(education, i, { endDate: val(e) }))} />
                 </label>
-                <label class="checkbox-label">
+                <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${edu.endDate === undefined}
                     onChange=${(e: Event) => {
                       const current = (e.target as HTMLInputElement).checked;

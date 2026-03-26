@@ -166,7 +166,7 @@
 			{% endif %}
 		</ul>
 		{% endif %}
-		
+
 		{% if let Some(skill_list) = resume.skills %}
 		{% if !skill_list.is_empty() %}
 		<h2>Skills</h2>
@@ -196,7 +196,7 @@
 		{% if let Some(label) = basics.label %}
 		<p class="label">{{ label }}</p>
 		{% endif %}
-		
+
 		{% if let Some(summary) = basics.summary %}
 		<section aria-label="Summary">
 			<h2>Summary</h2>
@@ -204,7 +204,7 @@
 		</section>
 		{% endif %}
 		{% endif %}
-		
+
 		{% if let Some(work_list) = resume.work %}
 		{% if !work_list.is_empty() %}
 		<section aria-label="Work Experience">
@@ -248,7 +248,7 @@
 		</section>
 		{% endif %}
 		{% endif %}
-		
+
 		{% if let Some(edu_list) = resume.education %}
 		{% if !edu_list.is_empty() %}
 		<section aria-label="Education">

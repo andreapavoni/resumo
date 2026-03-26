@@ -32,7 +32,7 @@ export function Preview({ resume, theme }: PreviewProps) {
   }, [resume, theme]);
 
   if (!previewHtml) {
-    return html`<p class="placeholder">Your resume preview will appear here as you type...</p>`;
+    return html`<p class="text-center italic text-gray-400 mt-16">Your resume preview will appear here as you type...</p>`;
   }
 
   return html`<div dangerouslySetInnerHTML=${{ __html: previewHtml }}></div>`;

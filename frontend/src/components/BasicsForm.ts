@@ -19,6 +19,11 @@ function val(e: Event): string {
   return (e.target as HTMLInputElement).value;
 }
 
+function autoResize(el: HTMLTextAreaElement) {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
+
 export function BasicsForm({ basics, onChange }: BasicsFormProps) {
   const loc = basics.location ?? {};
   const fileRef = useRef<HTMLInputElement>(null);
@@ -45,12 +50,12 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
   return html`
     <fieldset>
       <legend>Personal Information</legend>
-      <div class="photo-input">
+      <div class="flex items-center gap-3 mb-2">
         <input ref=${fileRef} type="file" accept="image/*" class="sr-only" onChange=${onFileChange} />
         ${basics.image
           ? html`
-            <img class="photo-thumb" src=${basics.image} alt="Profile" />
-            <div class="photo-actions">
+            <img class="w-14 h-14 rounded-full object-cover border border-gray-200" src=${basics.image} alt="Profile" />
+            <div class="flex gap-1.5">
               <button type="button" onClick=${handlePhoto}>Change Photo</button>
               <button type="button" onClick=${removePhoto}>Remove</button>
             </div>
@@ -83,7 +88,7 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
         <input type="url" value=${basics.url ?? ""} placeholder="https://janedoe.dev"
           onInput=${(e: Event) => onChange(set(basics, { url: val(e) }))} />
       </label>
-      <div class="field-row">
+      <div class="flex flex-col sm:flex-row gap-3">
         <label>
           City
           <input type="text" value=${loc.city ?? ""} placeholder="San Francisco"
@@ -102,8 +107,9 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
       </div>
       <label>
         Summary
-        <textarea rows="3" placeholder="A brief professional summary..."
-          onInput=${(e: Event) => onChange(set(basics, { summary: val(e) }))}
+        <textarea rows="1" class="resize-none overflow-hidden" placeholder="A brief professional summary..."
+          ref=${(el: HTMLTextAreaElement | null) => el && autoResize(el)}
+          onInput=${(e: Event) => { autoResize(e.target as HTMLTextAreaElement); onChange(set(basics, { summary: val(e) })); }}
         >${basics.summary ?? ""}</textarea>
       </label>
     </fieldset>

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --color-appblue: #2563eb;
+  --color-appbg: #f9fafb;
+}
+
+/* Bauhaus utilities (shared with landing) */
+.bauhaus-border {
+  border: 2px solid #000;
+}
+.bauhaus-shadow {
+  box-shadow: 4px 4px 0px 0px #000;
+  transition: all 0.2s ease;
+}
+.bauhaus-shadow:hover {
+  box-shadow: 2px 2px 0px 0px #000;
+  transform: translate(2px, 2px);
+}
+
+/* Form base styles — keeps component templates clean */
+@layer base {
+  fieldset {
+    @apply border border-gray-200 rounded-md p-4 mb-4;
+  }
+  legend {
+    @apply font-semibold text-sm;
+  }
+  label {
+    @apply block mb-2 text-xs text-gray-500;
+  }
+  input,
+  textarea,
+  select {
+    @apply block w-full px-2 py-1.5 mt-0.5 border border-gray-200 rounded text-sm bg-white
+      focus:outline-2 focus:outline-appblue focus:-outline-offset-1 focus:border-appblue;
+  }
+  input[type="checkbox"] {
+    @apply inline w-auto m-0;
+  }
+  button {
+    @apply cursor-pointer text-xs px-3 py-1.5 border border-gray-200 rounded bg-white
+      hover:bg-gray-100;
+  }
+}

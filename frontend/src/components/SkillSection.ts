@@ -36,18 +36,18 @@ export function SkillSection({ skills, onChange }: SkillSectionProps) {
       <legend>Skills</legend>
       ${skills.map(
         (skill, i) => html`
-          <div class="entry-group" key=${i}>
-            <div class="entry-header">
-              <span class="entry-title">Skill Group #${i + 1}</span>
-              <div class="entry-controls">
-                <button type="button" class="btn-icon" disabled=${i === 0}
+          <div class="border border-gray-200 rounded p-3 mb-3 bg-gray-50" key=${i}>
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-semibold text-sm">Skill Group #${i + 1}</span>
+              <div class="flex gap-1 items-center">
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(skills, i, i - 1))}>↑</button>
-                <button type="button" class="btn-icon" disabled=${i === skills.length - 1}
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === skills.length - 1}
                   onClick=${() => onChange(move(skills, i, i + 1))}>↓</button>
                 <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
               </div>
             </div>
-            <div class="field-row">
+            <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Category
                 <input type="text" value=${skill.name ?? ""} placeholder="Programming Languages"

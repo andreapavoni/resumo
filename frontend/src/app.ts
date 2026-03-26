@@ -40,23 +40,67 @@ function exportJson(resume: Resume) {
 export function App() {
   const [resume, setResume] = useState<Resume>({});
   const [theme, setTheme] = useState<Theme>("classic");
+  const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
 
   return html`
-    <div class="editor-layout no-print">
-      <h1 class="app-title">Resumo</h1>
-      <div class="toolbar">
-        <select value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
-          <option value="classic">Classic</option>
-          <option value="modern">Modern</option>
-        </select>
-        <button onClick=${() => importJson(setResume)}>Import JSON</button>
-        <button class="btn-primary" onClick=${() => exportJson(resume)}>Export JSON</button>
-        <button onClick=${() => window.print()}>Print / Save PDF</button>
+    <div class="flex flex-col min-h-screen bg-white text-gray-900">
+
+      <!-- Header -->
+      <header class="no-print border-b-2 border-black bg-white sticky top-0 z-50">
+        <div class="px-4 md:px-6 py-3 md:py-0 md:h-16 flex flex-wrap items-center justify-between gap-2">
+          <!-- Left: Logo -->
+          <a href="/" class="flex items-center gap-2 shrink-0">
+            <div class="w-7 h-7 bg-black text-white flex items-center justify-center font-bold text-lg rounded-sm">R</div>
+            <span class="font-extrabold text-xl tracking-tight">Resumo</span>
+          </a>
+          <!-- Right: Mobile toggle (visible only on mobile) -->
+          <div class="flex md:hidden gap-1 shrink-0">
+            <button
+              class="${activeTab === "edit" ? "bg-appblue text-white border-appblue font-semibold" : ""}"
+              onClick=${() => setActiveTab("edit")}>Edit</button>
+            <button
+              class="${activeTab === "preview" ? "bg-appblue text-white border-appblue font-semibold" : ""}"
+              onClick=${() => setActiveTab("preview")}>Preview</button>
+          </div>
+          <!-- Right: Toolbar (always visible, wraps on mobile) -->
+          <nav class="flex items-center gap-2 order-last md:order-none w-full md:w-auto">
+            <select value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
+              <option value="classic">Classic</option>
+              <option value="modern">Modern</option>
+            </select>
+            <div class="w-px h-5 bg-gray-200 hidden md:block"></div>
+            <button onClick=${() => importJson(setResume)}>Import</button>
+            <button class="bg-appblue text-white border-appblue font-semibold hover:opacity-90" onClick=${() => exportJson(resume)}>Export</button>
+            <button onClick=${() => window.print()}>Print</button>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Main: split pane -->
+      <div class="flex-1 relative">
+        <!-- Editor pane -->
+        <div class="no-print md:fixed md:left-0 md:top-16 md:w-[45%] md:h-[calc(100vh-7rem)] md:overflow-y-auto md:border-r md:border-gray-200 p-4 md:p-6 bg-white ${activeTab === "edit" ? "" : "hidden md:block"}">
+          <${Editor} resume=${resume} onChange=${setResume} />
+        </div>
+        <!-- Preview pane -->
+        <div class="preview-pane md:ml-[45%] p-4 md:p-8 md:pb-12 ${activeTab === "preview" ? "" : "hidden md:block"}">
+          <${Preview} resume=${resume} theme=${theme} />
+        </div>
       </div>
-      <${Editor} resume=${resume} onChange=${setResume} />
-    </div>
-    <div class="preview-pane">
-      <${Preview} resume=${resume} theme=${theme} />
+
+      <!-- Footer -->
+      <footer class="no-print border-t-2 border-black bg-white h-12 px-6 md:fixed md:bottom-0 md:left-0 md:right-0 md:z-40">
+        <div class="h-full flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+
+          </div>
+          <div class="text-gray-500 text-xs font-medium hidden sm:block">
+            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resume" class="text-black hover:underline">src</a> - No data about the requests you make is captured or stored.
+          </div>
+          <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">← Home</a>
+        </div>
+      </footer>
+
     </div>
   `;
 }

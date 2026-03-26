@@ -15,6 +15,11 @@ function val(e: Event): string {
   return (e.target as HTMLInputElement).value;
 }
 
+function autoResize(el: HTMLTextAreaElement) {
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
+
 function move<T>(arr: T[], from: number, to: number): T[] {
   const result = [...arr];
   const [item] = result.splice(from, 1);
@@ -36,18 +41,18 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
       <legend>Work Experience</legend>
       ${work.map(
         (job, i) => html`
-          <div class="entry-group" key=${i}>
-            <div class="entry-header">
-              <span class="entry-title">Work #${i + 1}</span>
-              <div class="entry-controls">
-                <button type="button" class="btn-icon" disabled=${i === 0}
+          <div class="border border-gray-200 rounded p-3 mb-3 bg-gray-50" key=${i}>
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-semibold text-sm">Work #${i + 1}</span>
+              <div class="flex gap-1 items-center">
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(work, i, i - 1))}>↑</button>
-                <button type="button" class="btn-icon" disabled=${i === work.length - 1}
+                <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === work.length - 1}
                   onClick=${() => onChange(move(work, i, i + 1))}>↓</button>
                 <button type="button" onClick=${() => removeEntry(i)}>Remove</button>
               </div>
             </div>
-            <div class="field-row">
+            <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Position
                 <input type="text" value=${job.position ?? ""} placeholder="Software Engineer"
@@ -64,20 +69,20 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
               <input type="text" value=${job.location ?? ""} placeholder="San Francisco, CA"
                 onInput=${(e: Event) => onChange(update(work, i, { location: val(e) }))} />
             </label>
-            <div class="field-row">
+            <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Start Date
                 <input type="month" value=${job.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(work, i, { startDate: val(e) }))} />
               </label>
-              <div class="date-field">
+              <div class="flex-1">
                 <label>
                   End Date
                   <input type="month" value=${job.endDate ?? ""}
                     disabled=${job.endDate === undefined}
                     onChange=${(e: Event) => onChange(update(work, i, { endDate: val(e) }))} />
                 </label>
-                <label class="checkbox-label">
+                <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${job.endDate === undefined}
                     onChange=${(e: Event) => {
                       const current = (e.target as HTMLInputElement).checked;
@@ -89,8 +94,9 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
             </div>
             <label>
               Summary
-              <textarea rows="2" placeholder="Brief description of role..."
-                onInput=${(e: Event) => onChange(update(work, i, { summary: val(e) }))}
+              <textarea rows="1" class="resize-none overflow-hidden" placeholder="Brief description of role..."
+                ref=${(el: HTMLTextAreaElement | null) => el && autoResize(el)}
+                onInput=${(e: Event) => { autoResize(e.target as HTMLTextAreaElement); onChange(update(work, i, { summary: val(e) })); }}
               >${job.summary ?? ""}</textarea>
             </label>
             <label>

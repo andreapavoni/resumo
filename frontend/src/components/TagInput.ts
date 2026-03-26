@@ -24,18 +24,20 @@ export function TagInput({ items, onChange, placeholder }: TagInputProps) {
   }
 
   return html`
-    <div class="tag-input">
+    <div class="border border-gray-200 rounded px-1.5 py-1 mt-0.5 bg-white flex flex-wrap gap-1 min-h-9 cursor-text focus-within:outline focus-within:outline-2 focus-within:outline-appblue">
       ${items.map(
         (item, i) => html`
-          <span class="tag-chip" key=${i}>
+          <span class="inline-flex items-center gap-1 bg-appblue text-white rounded px-1.5 py-0.5 text-xs" key=${i}>
             ${item}
-            <button type="button" onClick=${() => removeItem(i)} aria-label="Remove">×</button>
+            <button type="button"
+              class="bg-transparent border-none text-white p-0 text-xs leading-none cursor-pointer opacity-80 hover:opacity-100"
+              onClick=${() => removeItem(i)} aria-label="Remove">×</button>
           </span>
         `
       )}
       <input
         type="text"
-        class="tag-input-field"
+        class="border-none outline-none bg-transparent text-sm min-w-32 flex-1 px-0.5 py-0.5 w-auto inline-block mt-0"
         placeholder=${items.length === 0 ? (placeholder ?? "Type and press Enter") : ""}
         onKeyDown=${handleKeyDown}
       />

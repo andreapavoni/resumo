@@ -1,238 +1,224 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Resumo - The Minimalist Resume Builder</title>
-		<script src="https://cdn.tailwindcss.com"></script>
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-		<script src="https://unpkg.com/lucide@latest"></script>
-		<script>
-			tailwind.config = {
-				theme: {
-					extend: {
-						fontFamily: {
-							sans: ['Inter', 'sans-serif'],
-							},
-							colors: {
-								appblue: '#2563eb', // Taken from your "Export JSON" button
-								appbg: '#f9fafb',
-							}
-						}
-					}
-				}
-		</script>
-		<style>
-			/* Minimalist structural styling */
-			body {
-				-webkit-font-smoothing: antialiased;
-				-moz-osx-font-smoothing: grayscale;
-			}
-			.bauhaus-border {
-				border: 2px solid #000;
-			}
-			.bauhaus-shadow {
-				box-shadow: 4px 4px 0px 0px #000;
-				transition: all 0.2s ease;
-			}
-			.bauhaus-shadow:hover {
-				box-shadow: 2px 2px 0px 0px #000;
-				transform: translate(2px, 2px);
-			}
-		</style>
-	</head>
-	<body class="bg-white text-gray-900 flex flex-col min-h-screen">
 
-		<!-- Header -->
-		<header class="border-b-2 border-black bg-white sticky top-0 z-50">
-			<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-				<div class="flex items-center gap-2">
-					<div class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm">R</div>
-					<span class="font-extrabold text-2xl tracking-tight">Resumo</span>
-				</div>
-				<nav class="hidden md:flex items-center gap-8 font-medium">
-					<a href="#how-it-works" class="hover:text-appblue transition-colors">How it works</a>
-					<a href="#features" class="hover:text-appblue transition-colors">Features</a>
-					<a href="/app" class="bg-black text-white px-5 py-2.5 rounded-sm hover:bg-gray-800 transition-colors">Open App</a>
-				</nav>
-				<button class="md:hidden">
-					<i data-lucide="menu" class="w-6 h-6"></i>
-				</button>
-			</div>
-		</header>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resumo - The Minimalist Resume Builder</title>
+  <link rel="stylesheet" href="/src/styles/tailwind.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
 
-		<!-- Main Content -->
-		<main class="flex-grow">
+<body class="bg-white text-gray-900 flex flex-col min-h-screen">
 
-			<!-- Hero Section -->
-			<section class="pt-24 pb-16 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-				<div class="max-w-xl">
-					<h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
-						Build your <br>resume. <span class="text-appblue">Simply.</span>
-					</h1>
-					<p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
-						No clutter, no distractions. Just you and your professional story. Resumo is the minimalist tool designed to generate clean, professional CVs in seconds.
-					</p>
-					<div class="flex flex-col sm:flex-row gap-4">
-						<a href="/app" class="bauhaus-border bauhaus-shadow bg-appblue text-white px-8 py-4 font-bold text-lg text-center flex justify-center items-center gap-2">
-							Start Building Now
-							<i data-lucide="arrow-right" class="w-5 h-5"></i>
-						</a>
-						<a href="#how-it-works" class="bauhaus-border bg-white text-black px-8 py-4 font-bold text-lg text-center hover:bg-gray-50 transition-colors">
-							See how it works
-						</a>
-					</div>
-				</div>
+  <!-- Header -->
+  <header class="border-b-2 border-black bg-white sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm">R</div>
+        <span class="font-extrabold text-2xl tracking-tight">Resumo</span>
+      </div>
+      <nav class="flex items-center gap-4 md:gap-8 font-medium">
+        <a href="#how-it-works" class="hidden md:inline hover:text-appblue transition-colors">How it works</a>
+        <a href="#features" class="hidden md:inline hover:text-appblue transition-colors">Features</a>
+        <a href="/app"
+          class="bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-sm hover:bg-gray-800 transition-colors text-sm md:text-base">Open
+          App</a>
+      </nav>
+    </div>
+  </header>
 
-				<!-- Abstract App Preview (Based on your screenshot) -->
-				<div class="relative w-full aspect-[4/3] bg-appbg bauhaus-border rounded-lg overflow-hidden flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
-					<!-- Browser Bar -->
-					<div class="h-10 border-b-2 border-black bg-white flex items-center px-4 gap-2">
-						<div class="w-3 h-3 rounded-full border-2 border-black"></div>
-						<div class="w-3 h-3 rounded-full border-2 border-black"></div>
-						<div class="w-3 h-3 rounded-full border-2 border-black"></div>
-					</div>
-					<!-- Split View -->
-					<div class="flex-grow flex">
-						<!-- Editor Side -->
-						<div class="w-1/2 border-r-2 border-black p-6 flex flex-col gap-4 bg-white">
-							<div class="w-1/3 h-6 bg-gray-200 rounded-sm"></div>
-							<div class="w-full h-8 border-2 border-gray-200 rounded-sm mt-2"></div>
-							<div class="w-full h-8 border-2 border-gray-200 rounded-sm"></div>
-							<div class="w-full h-24 border-2 border-gray-200 rounded-sm mt-2"></div>
-						</div>
-						<!-- Preview Side -->
-						<div class="w-1/2 bg-gray-50 p-6 flex flex-col gap-3">
-							<div class="w-1/2 h-8 bg-black rounded-sm mb-2"></div>
-							<div class="w-full h-0.5 bg-black mb-2"></div>
-							<div class="w-full h-2 bg-gray-300 rounded-sm"></div>
-							<div class="w-5/6 h-2 bg-gray-300 rounded-sm"></div>
-							<div class="w-4/6 h-2 bg-gray-300 rounded-sm"></div>
+  <!-- Main Content -->
+  <main class="flex-grow">
 
-							<div class="w-1/3 h-4 bg-black rounded-sm mt-4 mb-1"></div>
-							<div class="w-full h-0.5 bg-black mb-2"></div>
-							<div class="w-full h-2 bg-gray-300 rounded-sm"></div>
-							<div class="w-full h-2 bg-gray-300 rounded-sm"></div>
-						</div>
-					</div>
-				</div>
-			</section>
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div class="max-w-xl">
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+          Build your <br>resume. <span class="text-appblue">Simply.</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
+          No clutter, no distractions. Just you and your professional story. Resumo is the minimalist tool designed to
+          generate clean, professional CVs in seconds.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/app"
+            class="bauhaus-border bauhaus-shadow bg-appblue text-white px-8 py-4 font-bold text-lg text-center flex justify-center items-center gap-2">
+            Start Building Now
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </a>
+          <a href="#how-it-works"
+            class="bauhaus-border bg-white text-black px-8 py-4 font-bold text-lg text-center hover:bg-gray-50 transition-colors">
+            See how it works
+          </a>
+        </div>
+      </div>
 
-			<!-- Divider -->
-			<div class="w-full border-t-2 border-black my-8"></div>
+      <!-- Abstract App Preview (Based on your screenshot) -->
+      <div
+        class="relative w-full aspect-[4/3] bg-appbg bauhaus-border rounded-lg overflow-hidden flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+        <!-- Browser Bar -->
+        <div class="h-10 border-b-2 border-black bg-white flex items-center px-4 gap-2">
+          <div class="w-3 h-3 rounded-full border-2 border-black"></div>
+          <div class="w-3 h-3 rounded-full border-2 border-black"></div>
+          <div class="w-3 h-3 rounded-full border-2 border-black"></div>
+        </div>
+        <!-- Split View -->
+        <div class="flex-grow flex">
+          <!-- Editor Side -->
+          <div class="w-1/2 border-r-2 border-black p-6 flex flex-col gap-4 bg-white">
+            <div class="w-1/3 h-6 bg-gray-200 rounded-sm"></div>
+            <div class="w-full h-8 border-2 border-gray-200 rounded-sm mt-2"></div>
+            <div class="w-full h-8 border-2 border-gray-200 rounded-sm"></div>
+            <div class="w-full h-24 border-2 border-gray-200 rounded-sm mt-2"></div>
+          </div>
+          <!-- Preview Side -->
+          <div class="w-1/2 bg-gray-50 p-6 flex flex-col gap-3">
+            <div class="w-1/2 h-8 bg-black rounded-sm mb-2"></div>
+            <div class="w-full h-0.5 bg-black mb-2"></div>
+            <div class="w-full h-2 bg-gray-300 rounded-sm"></div>
+            <div class="w-5/6 h-2 bg-gray-300 rounded-sm"></div>
+            <div class="w-4/6 h-2 bg-gray-300 rounded-sm"></div>
 
-			<!-- How it works -->
-			<section id="how-it-works" class="py-20 px-6 max-w-7xl mx-auto">
-				<div class="text-center mb-16">
-					<h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">Focus on content, not formatting.</h2>
-					<p class="text-gray-600 max-w-2xl mx-auto text-lg">Our dual-pane interface lets you write on the left and see the pixel-perfect result on the right, instantly.</p>
-				</div>
+            <div class="w-1/3 h-4 bg-black rounded-sm mt-4 mb-1"></div>
+            <div class="w-full h-0.5 bg-black mb-2"></div>
+            <div class="w-full h-2 bg-gray-300 rounded-sm"></div>
+            <div class="w-full h-2 bg-gray-300 rounded-sm"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<!-- Step 1 -->
-					<div class="bg-appbg bauhaus-border p-8 flex flex-col">
-						<div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">1</div>
-						<h3 class="text-2xl font-bold mb-3">Fill the blanks</h3>
-						<p class="text-gray-600 flex-grow">Enter your personal information, experience, and education into our straightforward, distraction-free form.</p>
-					</div>
-					<!-- Step 2 -->
-					<div class="bg-appbg bauhaus-border p-8 flex flex-col">
-						<div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">2</div>
-						<h3 class="text-2xl font-bold mb-3">Live Preview</h3>
-						<p class="text-gray-600 flex-grow">Watch your resume assemble itself in real-time. What you see on the screen is exactly what you get.</p>
-					</div>
-					<!-- Step 3 -->
-					<div class="bg-appbg bauhaus-border p-8 flex flex-col">
-						<div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">3</div>
-						<h3 class="text-2xl font-bold mb-3">Export & Go</h3>
-						<p class="text-gray-600 flex-grow">Download a crisp, ATS-friendly PDF instantly. Or export the raw JSON data for safekeeping and future edits.</p>
-					</div>
-				</div>
-			</section>
+    <!-- Divider -->
+    <div class="w-full border-t-2 border-black my-8"></div>
 
-			<!-- Feature Highlight -->
-			<section id="features" class="bg-black text-white py-24 px-6 mt-12">
-				<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-					<div>
-						<h2 class="text-4xl md:text-5xl font-bold mb-6">Your data is yours.</h2>
-						<p class="text-gray-300 text-lg mb-8 leading-relaxed">
-							We believe in privacy by design. Resumo runs entirely in your browser. No databases, no tracking, no hidden accounts.
-							Export your data to JSON and bring it back whenever you need an update.
-						</p>
-						<ul class="space-y-4">
-							<li class="flex items-center gap-3">
-								<i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
-								<span class="font-medium">100% Client-side processing</span>
-							</li>
-							<li class="flex items-center gap-3">
-								<i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
-								<span class="font-medium">Free and Open Source</span>
-							</li>
-							<li class="flex items-center gap-3">
-								<i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
-								<span class="font-medium">Print-ready PDF generation</span>
-							</li>
-						</ul>
-					</div>
-					<div class="flex justify-center">
-						<div class="bg-white/10 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-sm w-full">
-							<div class="flex flex-col gap-4">
-								<button class="bg-appblue text-white w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
-									<i data-lucide="file-json" class="w-5 h-5"></i>
-									Export JSON
-								</button>
-								<button class="bg-white text-black w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-									<i data-lucide="printer" class="w-5 h-5"></i>
-									Print / Save PDF
-								</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+    <!-- How it works -->
+    <section id="how-it-works" class="py-20 px-6 max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">Focus on content, not formatting.</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto text-lg">Our dual-pane interface lets you write on the left and see
+          the pixel-perfect result on the right, instantly.</p>
+      </div>
 
-			<!-- Final CTA -->
-			<section class="py-24 px-6 text-center max-w-3xl mx-auto">
-				<h2 class="text-4xl font-bold mb-6">Ready to land your next job?</h2>
-				<p class="text-xl text-gray-600 mb-10">Stop wrestling with word processors. Start building your perfect resume today.</p>
-				<a href="/app" class="inline-flex items-center gap-2 bg-black text-white px-10 py-5 font-bold text-xl rounded-sm hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-					Open Resumo Builder
-					<i data-lucide="arrow-up-right" class="w-6 h-6"></i>
-				</a>
-			</section>
-		</main>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Step 1 -->
+        <div class="bg-appbg bauhaus-border p-8 flex flex-col">
+          <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
+            1</div>
+          <h3 class="text-2xl font-bold mb-3">Fill the blanks</h3>
+          <p class="text-gray-600 flex-grow">Enter your personal information, experience, and education into our
+            straightforward, distraction-free form.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="bg-appbg bauhaus-border p-8 flex flex-col">
+          <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
+            2</div>
+          <h3 class="text-2xl font-bold mb-3">Live Preview</h3>
+          <p class="text-gray-600 flex-grow">Watch your resume assemble itself in real-time. What you see on the screen
+            is exactly what you get.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="bg-appbg bauhaus-border p-8 flex flex-col">
+          <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
+            3</div>
+          <h3 class="text-2xl font-bold mb-3">Export & Go</h3>
+          <p class="text-gray-600 flex-grow">Download a crisp, ATS-friendly PDF instantly. Or export the raw JSON data
+            for safekeeping and future edits.</p>
+        </div>
+      </div>
+    </section>
 
-		<!-- Footer -->
-		<footer class="border-t-2 border-black bg-white pt-12 pb-8 px-6 mt-auto">
-			<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-				<div class="flex items-center gap-2">
-					<div class="w-6 h-6 bg-black text-white flex items-center justify-center font-bold text-sm rounded-sm">R</div>
-					<span class="font-bold text-lg tracking-tight">Resumo</span>
-				</div>
+    <!-- Feature Highlight -->
+    <section id="features" class="bg-black text-white py-24 px-6 mt-12">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <div>
+          <h2 class="text-4xl md:text-5xl font-bold mb-6">Your data is yours.</h2>
+          <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+            We believe in privacy by design. Resumo runs entirely in your browser. No databases, no tracking, no hidden
+            accounts.
+            Export your data to JSON and bring it back whenever you need an update.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
+              <span class="font-medium">100% Client-side processing</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
+              <span class="font-medium">Free and Open Source</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
+              <span class="font-medium">Print-ready PDF generation</span>
+            </li>
+          </ul>
+        </div>
+        <div class="flex justify-center">
+          <div class="bg-white/10 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-sm w-full">
+            <div class="flex flex-col gap-4">
+              <button
+                class="bg-appblue text-white w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+                <i data-lucide="file-json" class="w-5 h-5"></i>
+                Export JSON
+              </button>
+              <button
+                class="bg-white text-black w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
+                <i data-lucide="printer" class="w-5 h-5"></i>
+                Print / Save PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-				<div class="text-gray-500 text-sm font-medium text-center md:text-left">
-					Design & Code by <a href="#" class="text-black hover:underline font-bold">Andrea Pavoni</a>. Built with simplicity in mind.
-				</div>
+    <!-- Final CTA -->
+    <section class="py-24 px-6 text-center max-w-3xl mx-auto">
+      <h2 class="text-4xl font-bold mb-6">Ready to land your next job?</h2>
+      <p class="text-xl text-gray-600 mb-10">Stop wrestling with word processors. Start building your perfect resume
+        today.</p>
+      <a href="/app"
+        class="inline-flex items-center gap-2 bg-black text-white px-10 py-5 font-bold text-xl rounded-sm hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+        Open Resumo Builder
+        <i data-lucide="arrow-up-right" class="w-6 h-6"></i>
+      </a>
+    </section>
+  </main>
 
-				<div class="flex items-center gap-4">
-					<a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="Github">
-						<i data-lucide="github" class="w-5 h-5"></i>
-					</a>
-					<a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="Twitter">
-						<i data-lucide="twitter" class="w-5 h-5"></i>
-					</a>
-					<a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="LinkedIn">
-						<i data-lucide="linkedin" class="w-5 h-5"></i>
-					</a>
-				</div>
-			</div>
-		</footer>
+  <!-- Footer -->
+  <footer class="border-t-2 border-black bg-white pt-12 pb-8 px-6 mt-auto">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
 
-		<script>
-			// Initialize Lucide icons
-			lucide.createIcons();
-		</script>
-	</body>
+      </div>
+
+      <div class="text-gray-500 text-sm font-medium text-center md:text-left">
+        ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a
+          href="https://github.com/andreapavoni/resume" class="text-black hover:underline">src</a> - No data
+        about the requests you make is captured or stored.
+      </div>
+
+      <div class="flex items-center gap-4">
+        <a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="Github">
+          <i data-lucide="github" class="w-5 h-5"></i>
+        </a>
+        <a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="Twitter">
+          <i data-lucide="twitter" class="w-5 h-5"></i>
+        </a>
+        <a href="#" class="text-gray-400 hover:text-black transition-colors" aria-label="LinkedIn">
+          <i data-lucide="linkedin" class="w-5 h-5"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+
 </html>
