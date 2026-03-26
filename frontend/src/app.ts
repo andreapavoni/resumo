@@ -64,7 +64,7 @@ export function App() {
           </div>
           <!-- Right: Toolbar (always visible, wraps on mobile) -->
           <nav class="flex items-center gap-2 order-last md:order-none w-full md:w-auto">
-            <select value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
+            <select aria-label="Resume theme" value=${theme} onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}>
               <option value="classic">Classic</option>
               <option value="modern">Modern</option>
             </select>

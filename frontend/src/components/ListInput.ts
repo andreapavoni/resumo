@@ -69,12 +69,12 @@ export function ListInput({ items, onChange, placeholder }: ListInputProps) {
                   onBlur=${(e: FocusEvent) => saveEdit(i, (e.target as HTMLInputElement).value)}
                   ref=${(el: HTMLInputElement | null) => el?.focus()}
                 />`
-              : html`<span class="flex-1 cursor-text px-0.5 py-0.5 rounded-sm hover:bg-black/5" onClick=${() => setEditingIndex(i)}>${item}</span>`
+              : html`<button type="button" class="flex-1 cursor-text px-0.5 py-0.5 rounded-sm hover:bg-black/5 text-left font-normal border-none bg-transparent" aria-label="Edit item" onClick=${() => setEditingIndex(i)}>${item}</button>`
             }
             <div class="flex gap-0.5 items-center shrink-0">
-              <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+              <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                 onClick=${() => onChange(move(items, i, i - 1))}>↑</button>
-              <button type="button" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === items.length - 1}
+              <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === items.length - 1}
                 onClick=${() => onChange(move(items, i, i + 1))}>↓</button>
               <button type="button"
                 class="border-none bg-transparent text-gray-400 px-0.5 text-base leading-none cursor-pointer hover:text-gray-900 hover:bg-transparent"
