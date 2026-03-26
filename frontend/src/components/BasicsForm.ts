@@ -54,7 +54,7 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
         <input ref=${fileRef} type="file" accept="image/*" class="sr-only" onChange=${onFileChange} />
         ${basics.image
           ? html`
-            <img class="w-14 h-14 rounded-full object-cover border border-gray-200" src=${basics.image} alt="Profile" />
+            <img class="w-14 h-14 rounded-full object-cover border-2 border-black" src=${basics.image} alt="Profile" />
             <div class="flex gap-1.5">
               <button type="button" onClick=${handlePhoto}>Change Photo</button>
               <button type="button" onClick=${removePhoto}>Remove</button>

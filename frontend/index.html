@@ -22,11 +22,11 @@
         <span class="font-extrabold text-2xl tracking-tight">Resumo</span>
       </div>
       <nav class="flex items-center gap-4 md:gap-8 font-medium">
-        <a href="#how-it-works" class="hidden md:inline hover:text-appblue transition-colors">How it works</a>
-        <a href="#features" class="hidden md:inline hover:text-appblue transition-colors">Features</a>
+        <a href="#how-it-works" class="hidden md:inline hover:text-appaccent transition-colors">How it works</a>
+        <a href="#features" class="hidden md:inline hover:text-appaccent transition-colors">Features</a>
         <a href="/app"
-          class="bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-sm hover:bg-gray-800 transition-colors text-sm md:text-base">Open
-          App</a>
+          class="bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-sm hover:bg-gray-800 transition-colors text-sm md:text-base">Build
+          Your Resume</a>
       </nav>
     </div>
   </header>
@@ -38,16 +38,16 @@
     <section class="pt-24 pb-16 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="max-w-xl">
         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
-          Build your <br>resume. <span class="text-appblue">Simply.</span>
+          Build your <br>resume. <span class="text-appaccent">Simply.</span>
         </h1>
         <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
-          No clutter, no distractions. Just you and your professional story. Resumo is the minimalist tool designed to
-          generate clean, professional CVs in seconds.
+          Skip the word processors and design tools. Resumo generates clean, ATS-friendly resumes — no formatting
+          headaches, no accounts, just results.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
           <a href="/app"
-            class="bauhaus-border bauhaus-shadow bg-appblue text-white px-8 py-4 font-bold text-lg text-center flex justify-center items-center gap-2">
-            Start Building Now
+            class="bauhaus-border bauhaus-shadow bg-appaccent text-white px-8 py-4 font-bold text-lg text-center flex justify-center items-center gap-2">
+            Build Your Resume
             <i data-lucide="arrow-right" class="w-5 h-5"></i>
           </a>
           <a href="#how-it-works"
@@ -125,8 +125,9 @@
           <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
             3</div>
           <h3 class="text-2xl font-bold mb-3">Export & Go</h3>
-          <p class="text-gray-600 flex-grow">Download a crisp, ATS-friendly PDF instantly. Or export the raw JSON data
-            for safekeeping and future edits.</p>
+          <p class="text-gray-600 flex-grow">Download a crisp, ATS-friendly PDF instantly. Your data exports as standard
+            JSON Resume — fully compatible with <a href="https://jsonresume.org"
+              class="underline hover:text-black">jsonresume.org</a> for maximum portability.</p>
         </div>
       </div>
     </section>
@@ -135,54 +136,38 @@
     <section id="features" class="bg-black text-white py-24 px-6 mt-12">
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div>
-          <h2 class="text-4xl md:text-5xl font-bold mb-6">Your data is yours.</h2>
+          <h2 class="text-4xl md:text-5xl font-bold mb-6">Your data stays yours.</h2>
           <p class="text-gray-300 text-lg mb-8 leading-relaxed">
-            We believe in privacy by design. Resumo runs entirely in your browser. No databases, no tracking, no hidden
-            accounts.
-            Export your data to JSON and bring it back whenever you need an update.
+            No accounts, no databases, no tracking. Your resume data lives in your browser and in the JSON files you
+            export. Nothing is stored or shared.
           </p>
           <ul class="space-y-4">
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
-              <span class="font-medium">100% Client-side processing</span>
+              <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
+              <span class="font-medium">No account or signup required</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
+              <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
               <span class="font-medium">Free and Open Source</span>
             </li>
             <li class="flex items-center gap-3">
-              <i data-lucide="check-circle" class="text-appblue w-6 h-6"></i>
-              <span class="font-medium">Print-ready PDF generation</span>
+              <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
+              <span class="font-medium">ATS-friendly, print-ready output</span>
             </li>
           </ul>
         </div>
-        <div class="flex justify-center">
-          <div class="bg-white/10 p-8 rounded-2xl border border-white/20 backdrop-blur-sm max-w-sm w-full">
-            <div class="flex flex-col gap-4">
-              <button
-                class="bg-appblue text-white w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition">
-                <i data-lucide="file-json" class="w-5 h-5"></i>
-                Export JSON
-              </button>
-              <button
-                class="bg-white text-black w-full py-4 font-bold text-lg flex items-center justify-center gap-2 hover:bg-gray-200 transition">
-                <i data-lucide="printer" class="w-5 h-5"></i>
-                Print / Save PDF
-              </button>
-            </div>
-          </div>
-        </div>
+
       </div>
     </section>
 
     <!-- Final CTA -->
     <section class="py-24 px-6 text-center max-w-3xl mx-auto">
       <h2 class="text-4xl font-bold mb-6">Ready to land your next job?</h2>
-      <p class="text-xl text-gray-600 mb-10">Stop wrestling with word processors. Start building your perfect resume
-        today.</p>
+      <p class="text-xl text-gray-600 mb-10">No Word. No Canva. No formatting struggles. Just a clean, ATS-ready resume
+        in minutes.</p>
       <a href="/app"
         class="inline-flex items-center gap-2 bg-black text-white px-10 py-5 font-bold text-xl rounded-sm hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-        Open Resumo Builder
+        Build Your Resume
         <i data-lucide="arrow-up-right" class="w-6 h-6"></i>
       </a>
     </section>

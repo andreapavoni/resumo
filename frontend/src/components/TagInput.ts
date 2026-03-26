@@ -24,10 +24,10 @@ export function TagInput({ items, onChange, placeholder }: TagInputProps) {
   }
 
   return html`
-    <div class="border border-gray-200 rounded px-1.5 py-1 mt-0.5 bg-white flex flex-wrap gap-1 min-h-9 cursor-text focus-within:outline focus-within:outline-2 focus-within:outline-appblue">
+    <div class="border border-black/20 rounded-sm px-1.5 py-1 mt-0.5 bg-white flex flex-wrap gap-1 min-h-9 cursor-text focus-within:outline focus-within:outline-2 focus-within:outline-appaccent">
       ${items.map(
         (item, i) => html`
-          <span class="inline-flex items-center gap-1 bg-appblue text-white rounded px-1.5 py-0.5 text-xs" key=${i}>
+          <span class="inline-flex items-center gap-1 bg-black text-white rounded-sm px-1.5 py-0.5 text-xs font-medium" key=${i}>
             ${item}
             <button type="button"
               class="bg-transparent border-none text-white p-0 text-xs leading-none cursor-pointer opacity-80 hover:opacity-100"

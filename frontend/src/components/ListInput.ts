@@ -55,15 +55,15 @@ export function ListInput({ items, onChange, placeholder }: ListInputProps) {
   }
 
   return html`
-    <div class="mt-0.5 border border-gray-200 rounded bg-white overflow-hidden">
+    <div class="mt-0.5 border border-black/20 rounded-sm bg-white overflow-hidden">
       ${items.map(
         (item, i) => html`
-          <div class="flex items-baseline gap-1.5 px-2 py-1.5 border-b border-gray-200 text-sm" key=${i}>
+          <div class="flex items-baseline gap-1.5 px-2 py-1.5 border-b border-black/10 text-sm" key=${i}>
             <span class="text-gray-400 shrink-0">\u2022</span>
             ${editingIndex === i
               ? html`<input
                   type="text"
-                  class="flex-1 border border-appblue rounded px-0.5 py-0.5 text-sm outline-none w-auto mt-0"
+                  class="flex-1 border border-appaccent rounded-sm px-0.5 py-0.5 text-sm outline-none w-auto mt-0"
                   value=${item}
                   onKeyDown=${(e: KeyboardEvent) => handleEditKeyDown(e, i)}
                   onBlur=${(e: FocusEvent) => saveEdit(i, (e.target as HTMLInputElement).value)}
@@ -92,7 +92,7 @@ export function ListInput({ items, onChange, placeholder }: ListInputProps) {
           placeholder=${placeholder ?? "Add a bullet point and press Enter"}
           onKeyDown=${handleKeyDown}
         />
-        <button type="button" class="border-none border-l border-gray-200 rounded-none bg-gray-100 text-xs px-3 py-1.5 hover:bg-gray-200" onClick=${addItem}>Add</button>
+        <button type="button" class="border-none border-l border-black/20 rounded-none bg-gray-100 text-xs px-3 py-1.5 font-medium hover:bg-gray-200" onClick=${addItem}>Add</button>
       </div>
     </div>
   `;
