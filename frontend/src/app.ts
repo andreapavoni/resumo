@@ -90,11 +90,14 @@ export function App() {
 
       <!-- Footer -->
       <footer class="no-print border-t-2 border-black bg-white h-12 px-6 md:fixed md:bottom-0 md:left-0 md:right-0 md:z-40">
-        <div class="h-full flex items-center justify-between gap-4">
-          <div class="text-gray-500 text-xs font-medium hidden sm:block">
-            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resume" class="text-black hover:underline">src</a> - No data about the requests you make is captured or stored.
+        <div class="h-full grid grid-cols-3 items-center">
+          <div></div>
+          <div class="text-gray-500 text-xs font-medium text-center  sm:block">
+            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resume" class="text-black hover:underline">src</a> - No data about the requests is captured or stored.
           </div>
-          <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">← Home</a>
+          <div class="flex justify-end">
+            <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">← Home</a>
+          </div>
         </div>
       </footer>
 
