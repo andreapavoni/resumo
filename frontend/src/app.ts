@@ -1,8 +1,20 @@
 import { html } from "htm/preact";
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import { Editor } from "./components/Editor.js";
 import { Preview } from "./components/Preview.js";
 import type { Resume, Theme } from "./types.js";
+
+const STORAGE_KEY = "resumo:resume";
+const THEME_KEY = "resumo:theme";
+
+function loadState<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
 
 function importJson(setResume: (r: Resume) => void) {
   const input = document.createElement("input");
@@ -38,9 +50,17 @@ function exportJson(resume: Resume) {
 }
 
 export function App() {
-  const [resume, setResume] = useState<Resume>({});
-  const [theme, setTheme] = useState<Theme>("classic");
+  const [resume, setResume] = useState<Resume>(() => loadState(STORAGE_KEY, {}));
+  const [theme, setTheme] = useState<Theme>(() => loadState(THEME_KEY, "classic"));
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(resume));
+      localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [resume, theme]);
 
   return html`
     <div class="editor-ui flex flex-col min-h-screen bg-white text-gray-900">
