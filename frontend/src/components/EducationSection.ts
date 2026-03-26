@@ -1,4 +1,5 @@
 import { html } from "htm/preact";
+import { ListInput } from "./ListInput.js";
 import type { Education } from "../types.js";
 
 interface EducationSectionProps {
@@ -46,11 +47,18 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
                 <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>Remove</button>
               </div>
             </div>
-            <label>
-              Institution
-              <input type="text" value=${edu.institution ?? ""} placeholder="University of Example"
-                onInput=${(e: Event) => onChange(update(education, i, { institution: val(e) }))} />
-            </label>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <label>
+                Institution
+                <input type="text" value=${edu.institution ?? ""} placeholder="University of Example"
+                  onInput=${(e: Event) => onChange(update(education, i, { institution: val(e) }))} />
+              </label>
+              <label>
+                Website
+                <input type="url" value=${edu.url ?? ""} placeholder="https://mit.edu"
+                  onInput=${(e: Event) => onChange(update(education, i, { url: val(e) }))} />
+              </label>
+            </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
                 Degree
@@ -90,6 +98,14 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
               GPA / Score
               <input type="text" value=${edu.score ?? ""} placeholder="3.8"
                 onInput=${(e: Event) => onChange(update(education, i, { score: val(e) }))} />
+            </label>
+            <label>
+              Courses
+              <${ListInput}
+                items=${edu.courses ?? []}
+                placeholder="Add a course and press Enter"
+                onChange=${(items: string[]) => onChange(update(education, i, { courses: items }))}
+              />
             </label>
           </div>
         `

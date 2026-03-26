@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 import { useRef } from "preact/hooks";
-import type { Basics, Location } from "../types.js";
+import type { Basics, Location, Profile } from "../types.js";
 
 interface BasicsFormProps {
   basics: Basics;
@@ -13,6 +13,11 @@ function set(basics: Basics, patch: Partial<Basics>): Basics {
 
 function setLocation(basics: Basics, patch: Partial<Location>): Basics {
   return { ...basics, location: { ...basics.location, ...patch } };
+}
+
+function updateProfile(basics: Basics, index: number, patch: Partial<Profile>): Basics {
+  const profiles = (basics.profiles ?? []).map((p, i) => i === index ? { ...p, ...patch } : p);
+  return { ...basics, profiles };
 }
 
 function val(e: Event): string {
@@ -112,6 +117,37 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
           onInput=${(e: Event) => { autoResize(e.target as HTMLTextAreaElement); onChange(set(basics, { summary: val(e) })); }}
         >${basics.summary ?? ""}</textarea>
       </label>
+      <div class="mt-3">
+        <div class="text-xs font-bold uppercase tracking-wide mb-2">Social Profiles</div>
+        ${(basics.profiles ?? []).map((profile, i) => html`
+          <div class="border-2 border-black/60 rounded-sm p-3 mb-2 bg-white" key=${i}>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wide">Profile #${i + 1}</h3>
+              <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10"
+                onClick=${() => onChange({ ...basics, profiles: (basics.profiles ?? []).filter((_, j) => j !== i) })}>Remove</button>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <label>
+                Network
+                <input type="text" value=${profile.network ?? ""} placeholder="LinkedIn"
+                  onInput=${(e: Event) => onChange(updateProfile(basics, i, { network: val(e) }))} />
+              </label>
+              <label>
+                Username
+                <input type="text" value=${profile.username ?? ""} placeholder="janedoe"
+                  onInput=${(e: Event) => onChange(updateProfile(basics, i, { username: val(e) }))} />
+              </label>
+              <label>
+                URL
+                <input type="url" value=${profile.url ?? ""} placeholder="https://linkedin.com/in/janedoe"
+                  onInput=${(e: Event) => onChange(updateProfile(basics, i, { url: val(e) }))} />
+              </label>
+            </div>
+          </div>
+        `)}
+        <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg"
+          onClick=${() => onChange({ ...basics, profiles: [...(basics.profiles ?? []), {}] })}>+ Add Profile</button>
+      </div>
     </fieldset>
   `;
 }

@@ -64,6 +64,18 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
                   onInput=${(e: Event) => onChange(update(work, i, { name: val(e) }))} />
               </label>
             </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <label>
+                Website
+                <input type="url" value=${job.url ?? ""} placeholder="https://acme.example.com"
+                  onInput=${(e: Event) => onChange(update(work, i, { url: val(e) }))} />
+              </label>
+              <label>
+                Description
+                <input type="text" value=${job.description ?? ""} placeholder="e.g. Social Media Company"
+                  onInput=${(e: Event) => onChange(update(work, i, { description: val(e) }))} />
+              </label>
+            </div>
             <label>
               Location
               <input type="text" value=${job.location ?? ""} placeholder="San Francisco, CA"

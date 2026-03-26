@@ -1,0 +1,77 @@
+import { html } from "htm/preact";
+import type { Certificate } from "../types.js";
+
+interface CertificateSectionProps {
+  certificates: Certificate[];
+  onChange: (certificates: Certificate[]) => void;
+}
+
+function update(certificates: Certificate[], index: number, patch: Partial<Certificate>): Certificate[] {
+  return certificates.map((c, i) => (i === index ? { ...c, ...patch } : c));
+}
+
+function val(e: Event): string {
+  return (e.target as HTMLInputElement).value;
+}
+
+function move<T>(arr: T[], from: number, to: number): T[] {
+  const result = [...arr];
+  const [item] = result.splice(from, 1);
+  result.splice(to, 0, item);
+  return result;
+}
+
+export function CertificateSection({ certificates, onChange }: CertificateSectionProps) {
+  function addEntry() {
+    onChange([...certificates, {}]);
+  }
+
+  function removeEntry(index: number) {
+    onChange(certificates.filter((_, i) => i !== index));
+  }
+
+  return html`
+    <fieldset>
+      <legend>Certificates</legend>
+      ${certificates.map(
+        (cert, i) => html`
+          <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
+            <div class="flex justify-between items-center mb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wide">Certificate #${i + 1}</h3>
+              <div class="flex gap-1 items-center">
+                <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+                  onClick=${() => onChange(move(certificates, i, i - 1))}>↑</button>
+                <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === certificates.length - 1}
+                  onClick=${() => onChange(move(certificates, i, i + 1))}>↓</button>
+                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>Remove</button>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <label>
+                Name
+                <input type="text" value=${cert.name ?? ""} placeholder="Certified Kubernetes Administrator"
+                  onInput=${(e: Event) => onChange(update(certificates, i, { name: val(e) }))} />
+              </label>
+              <label>
+                Issuer
+                <input type="text" value=${cert.issuer ?? ""} placeholder="CNCF"
+                  onInput=${(e: Event) => onChange(update(certificates, i, { issuer: val(e) }))} />
+              </label>
+              <label>
+                Date
+                <input type="month" value=${cert.date ?? ""}
+                  onChange=${(e: Event) => onChange(update(certificates, i, { date: val(e) }))} />
+              </label>
+            </div>
+            <label>
+              URL
+              <input type="url" value=${cert.url ?? ""} placeholder="https://example.com/cert"
+                onInput=${(e: Event) => onChange(update(certificates, i, { url: val(e) }))} />
+            </label>
+          </div>
+        `
+      )}
+      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>+ Add Certificate</button>
+    </fieldset>
+  `;
+}
