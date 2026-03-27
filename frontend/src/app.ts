@@ -146,6 +146,24 @@ export function App() {
               <i data-lucide="printer" class="w-4 h-4"></i>
               <span class="hidden lg:inline">Print</span>
             </button>
+
+            <div class="w-px h-6 bg-black/10 hidden md:block mx-1"></div>
+
+            <button
+              class="flex items-center gap-2 hover:text-appaccent transition-colors"
+              onClick=${() => {
+                if (!confirm("Reset all resume data? This cannot be undone.")) return;
+                localStorage.removeItem(STORAGE_KEY);
+                localStorage.removeItem(THEME_KEY);
+                setResume({});
+                setTheme("classic");
+              }}
+              title="Reset resume data"
+              aria-label="Reset resume data"
+            >
+              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+              <span class="hidden lg:inline">Reset</span>
+            </button>
           </nav>
         </div>
       </header>
