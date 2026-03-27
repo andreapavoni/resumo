@@ -2,6 +2,7 @@ use askama::Template;
 use axum::{Json, extract::Query, http::StatusCode, response::Html};
 use serde::Deserialize;
 
+use crate::i18n::{Translations, translations_for};
 use crate::resume::models::Resume;
 
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
@@ -12,10 +13,16 @@ pub enum Theme {
     Modern,
 }
 
+fn default_locale() -> String {
+    "en".to_string()
+}
+
 #[derive(Deserialize)]
 pub struct RenderQuery {
     #[serde(default)]
     pub theme: Theme,
+    #[serde(default = "default_locale")]
+    pub locale: String,
 }
 
 macro_rules! theme_templates {
@@ -23,12 +30,15 @@ macro_rules! theme_templates {
         $(
             #[derive(Template)]
             #[template(path = $path)]
-            struct $variant { resume: Resume }
+            struct $variant {
+                resume: Resume,
+                t: &'static Translations,
+            }
         )+
 
-        fn render_themed(theme: Theme, resume: Resume) -> Result<String, askama::Error> {
+        fn render_themed(theme: Theme, resume: Resume, t: &'static Translations) -> Result<String, askama::Error> {
             match theme {
-                $(Theme::$variant => $variant { resume }.render(),)+
+                $(Theme::$variant => $variant { resume, t }.render(),)+
             }
         }
     };
@@ -50,7 +60,8 @@ pub async fn render_resume(
         edu.sort_by(|a, b| b.start_date.cmp(&a.start_date));
     }
 
-    render_themed(query.theme, resume).map(Html).map_err(|err| {
+    let t = translations_for(&query.locale);
+    render_themed(query.theme, resume, t).map(Html).map_err(|err| {
         tracing::error!(%err, "template render failed");
         StatusCode::INTERNAL_SERVER_ERROR
     })

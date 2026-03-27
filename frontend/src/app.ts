@@ -2,10 +2,12 @@ import { html } from "htm/preact";
 import { useEffect, useState } from "preact/hooks";
 import { Editor } from "./components/Editor.js";
 import { Preview } from "./components/Preview.js";
+import { t, setLocale, SUPPORTED_LOCALES, type Locale } from "./i18n.js";
 import type { Resume, Theme } from "./types.js";
 
 const STORAGE_KEY = "resumo:resume";
 const THEME_KEY = "resumo:theme";
+const LOCALE_KEY = "resumo:locale";
 
 function loadState<T>(key: string, fallback: T): T {
   try {
@@ -29,7 +31,7 @@ function importJson(setResume: (r: Resume) => void) {
         const resume = JSON.parse(reader.result as string) as Resume;
         setResume(resume);
       } catch {
-        alert("Invalid JSON file.");
+        alert(t("app.invalidJson"));
       }
     };
     reader.readAsText(file);
@@ -54,7 +56,11 @@ declare const lucide: any;
 export function App() {
   const [resume, setResume] = useState<Resume>(() => loadState(STORAGE_KEY, {}));
   const [theme, setTheme] = useState<Theme>(() => loadState(THEME_KEY, "classic"));
+  const [locale, setLocaleState] = useState<Locale>(() => loadState(LOCALE_KEY, "en"));
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+
+  // Sync module-level locale so t() calls in child components pick it up
+  setLocale(locale);
 
   useEffect(() => {
     if (typeof lucide !== "undefined") {
@@ -66,9 +72,10 @@ export function App() {
     const timer = setTimeout(() => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(resume));
       localStorage.setItem(THEME_KEY, JSON.stringify(theme));
+      localStorage.setItem(LOCALE_KEY, JSON.stringify(locale));
     }, 400);
     return () => clearTimeout(timer);
-  }, [resume, theme]);
+  }, [resume, theme, locale]);
 
   return html`
     <div class="editor-ui flex flex-col min-h-screen bg-white text-gray-900">
@@ -87,14 +94,14 @@ export function App() {
             <button
               class="flex items-center gap-1.5 px-3 py-1 rounded-sm transition-colors ${activeTab === "edit" ? "bg-white shadow-sm font-bold text-appaccent" : "text-gray-500 border-none bg-transparent hover:bg-black/5"}"
               onClick=${() => setActiveTab("edit")}
-              aria-label="Edit Mode"
+              aria-label=${t("app.editMode")}
             >
               <i data-lucide="edit-3" class="w-4 h-4"></i>
             </button>
             <button
               class="flex items-center gap-1.5 px-3 py-1 rounded-sm transition-colors ${activeTab === "preview" ? "bg-white shadow-sm font-bold text-appaccent" : "text-gray-500 border-none bg-transparent hover:bg-black/5"}"
               onClick=${() => setActiveTab("preview")}
-              aria-label="Preview Mode"
+              aria-label=${t("app.previewMode")}
             >
               <i data-lucide="eye" class="w-4 h-4"></i>
             </button>
@@ -105,7 +112,7 @@ export function App() {
             <div class="relative flex items-center group">
                <i data-lucide="palette" class="w-4 h-4 absolute left-2 text-gray-400 pointer-events-none"></i>
                <select
-                 aria-label="Resume theme"
+                 aria-label=${t("app.themeLabel")}
                  value=${theme}
                  onChange=${(e: Event) => setTheme((e.target as HTMLSelectElement).value as Theme)}
                  class="pl-7 pr-2 py-1.5 text-xs font-bold uppercase tracking-wider border-2 border-black rounded-sm bg-white cursor-pointer hover:bg-gray-50"
@@ -115,36 +122,48 @@ export function App() {
                </select>
             </div>
 
+            <div class="relative flex items-center group">
+               <i data-lucide="globe" class="w-4 h-4 absolute left-2 text-gray-400 pointer-events-none"></i>
+               <select
+                 aria-label=${t("app.languageLabel")}
+                 value=${locale}
+                 onChange=${(e: Event) => setLocaleState((e.target as HTMLSelectElement).value as Locale)}
+                 class="pl-7 pr-2 py-1.5 text-xs font-bold uppercase tracking-wider border-2 border-black rounded-sm bg-white cursor-pointer hover:bg-gray-50"
+               >
+                 ${SUPPORTED_LOCALES.map(l => html`<option value=${l.code}>${l.label}</option>`)}
+               </select>
+            </div>
+
             <div class="w-px h-6 bg-black/10 hidden md:block mx-1"></div>
 
             <button
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
               onClick=${() => importJson(setResume)}
-              title="Import JSON"
-              aria-label="Import JSON"
+              title=${t("app.importJson")}
+              aria-label=${t("app.importJson")}
             >
               <i data-lucide="file-up" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">Import</span>
+              <span class="hidden lg:inline">${t("app.import")}</span>
             </button>
 
             <button
               class="flex items-center gap-2 bg-appaccent text-white border-appaccent font-bold hover:opacity-90 transition-opacity"
               onClick=${() => exportJson(resume)}
-              title="Export JSON"
-              aria-label="Export JSON"
+              title=${t("app.exportJson")}
+              aria-label=${t("app.exportJson")}
             >
               <i data-lucide="file-down" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">Export</span>
+              <span class="hidden lg:inline">${t("app.export")}</span>
             </button>
 
             <button
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
               onClick=${() => window.print()}
-              title="Print to PDF"
-              aria-label="Print to PDF"
+              title=${t("app.printToPdf")}
+              aria-label=${t("app.printToPdf")}
             >
               <i data-lucide="printer" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">Print</span>
+              <span class="hidden lg:inline">${t("app.print")}</span>
             </button>
 
             <div class="w-px h-6 bg-black/10 hidden md:block mx-1"></div>
@@ -152,17 +171,19 @@ export function App() {
             <button
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
               onClick=${() => {
-                if (!confirm("Reset all resume data? This cannot be undone.")) return;
+                if (!confirm(t("app.resetConfirm"))) return;
                 localStorage.removeItem(STORAGE_KEY);
                 localStorage.removeItem(THEME_KEY);
+                localStorage.removeItem(LOCALE_KEY);
                 setResume({});
                 setTheme("classic");
+                setLocaleState("en");
               }}
-              title="Reset resume data"
-              aria-label="Reset resume data"
+              title=${t("app.resetData")}
+              aria-label=${t("app.resetData")}
             >
               <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">Reset</span>
+              <span class="hidden lg:inline">${t("app.reset")}</span>
             </button>
           </nav>
         </div>
@@ -176,7 +197,7 @@ export function App() {
         </div>
         <!-- Preview pane -->
         <div class="preview-pane md:ml-[45%] p-4 md:p-8 md:pb-12 ${activeTab === "preview" ? "" : "hidden md:block"}">
-          <${Preview} resume=${resume} theme=${theme} />
+          <${Preview} resume=${resume} theme=${theme} locale=${locale} />
         </div>
       </div>
 
@@ -185,10 +206,10 @@ export function App() {
         <div class="h-full grid grid-cols-3 items-center">
           <div></div>
           <div class="text-gray-500 text-xs font-medium text-center  sm:block">
-            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resumo" class="text-black hover:underline">src</a> - No data about the requests is captured or stored.
+            ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a href="https://github.com/andreapavoni/resumo" class="text-black hover:underline">src</a> - ${t("app.footer")}
           </div>
           <div class="flex justify-end">
-            <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">← Home</a>
+            <a href="/" class="text-xs text-gray-500 hover:text-black transition-colors font-medium shrink-0">${t("app.home")}</a>
           </div>
         </div>
       </footer>

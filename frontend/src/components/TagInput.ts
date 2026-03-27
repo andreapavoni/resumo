@@ -1,4 +1,5 @@
 import { html } from "htm/preact";
+import { t } from "../i18n.js";
 
 interface TagInputProps {
   items: string[];
@@ -31,14 +32,14 @@ export function TagInput({ items, onChange, placeholder }: TagInputProps) {
             ${item}
             <button type="button"
               class="bg-transparent border-none text-white p-0 text-xs leading-none cursor-pointer opacity-80 hover:opacity-100"
-              onClick=${() => removeItem(i)} aria-label="Remove">×</button>
+              onClick=${() => removeItem(i)} aria-label=${t("common.remove")}>×</button>
           </span>
         `
       )}
       <input
         type="text"
         class="border-none outline-none bg-transparent text-sm min-w-32 flex-1 px-0.5 py-0.5 w-auto inline-block mt-0"
-        placeholder=${items.length === 0 ? (placeholder ?? "Type and press Enter") : ""}
+        placeholder=${items.length === 0 ? (placeholder ?? t("common.tagPlaceholder")) : ""}
         onKeyDown=${handleKeyDown}
       />
     </div>

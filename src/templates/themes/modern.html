@@ -137,6 +137,10 @@
 		padding: 0.15rem 0.5rem;
 		border-radius: 10px;
 	}
+
+ .resume .resume-section {
+    margin-top: 1rem;
+  }
 </style>
 <article class="resume">
 	<aside class="sidebar">
@@ -145,7 +149,7 @@
 		<img class="resume-photo" src="{{ image }}" alt="">
 		{% endif %}
 
-		<h2>Contact</h2>
+		<h2>{{ t.contact }}</h2>
 		<ul class="contact-list">
 			{% if let Some(email) = basics.email %}
 			<li><a href="mailto:{{ email }}">{{ email }}</a></li>
@@ -169,7 +173,7 @@
 
 		{% if let Some(skill_list) = resume.skills %}
 		{% if !skill_list.is_empty() %}
-		<h2>Skills</h2>
+		<h2>{{ t.skills }}</h2>
 		{% for skill in skill_list %}
 		<div class="skill-group">
 			{% if let Some(name) = skill.name %}
@@ -198,8 +202,8 @@
 		{% endif %}
 
 		{% if let Some(summary) = basics.summary %}
-		<section aria-label="Summary">
-			<h2>Summary</h2>
+		<section  class="resume-section" aria-label="{{ t.summary }}">
+			<h2>{{ t.summary }}</h2>
 			<p>{{ summary }}</p>
 		</section>
 		{% endif %}
@@ -207,8 +211,8 @@
 
 		{% if let Some(work_list) = resume.work %}
 		{% if !work_list.is_empty() %}
-		<section aria-label="Work Experience">
-			<h2>Experience</h2>
+		<section  class="resume-section" aria-label="{{ t.experience }}">
+			<h2>{{ t.experience }}</h2>
 			{% for job in work_list %}
 			<article class="entry">
 				<header>
@@ -229,7 +233,7 @@
 						–
 						{% match job.end_date %}
 						{% when Some with (d) %}<time>{{ d }}</time>
-						{% when None %}Present
+						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
 				</header>
@@ -251,15 +255,15 @@
 
 		{% if let Some(edu_list) = resume.education %}
 		{% if !edu_list.is_empty() %}
-		<section aria-label="Education">
-			<h2>Education</h2>
+		<section class="resume-section" aria-label="{{ t.education }}">
+			<h2>{{ t.education }}</h2>
 			{% for edu in edu_list %}
 			<article class="entry">
 				<header>
 					<h3>
 						{{ edu.study_type.as_deref().unwrap_or("") }}
 						{% if let Some(area) = edu.area %}
-						in {{ area }}
+						{{ t.in_field }} {{ area }}
 						{% endif %}
 					</h3>
 					{% if let Some(inst) = edu.institution %}
@@ -273,12 +277,12 @@
 						–
 						{% match edu.end_date %}
 						{% when Some with (d) %}<time>{{ d }}</time>
-						{% when None %}Present
+						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
 				</header>
 				{% if let Some(score) = edu.score %}
-				<p class="score">GPA: {{ score }}</p>
+				<p class="score">{{ t.gpa_label }}{{ score }}</p>
 				{% endif %}
 			</article>
 			{% endfor %}

@@ -1,5 +1,6 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
+import { t } from "../i18n.js";
 import type { Education } from "../types.js";
 
 interface EducationSectionProps {
@@ -33,53 +34,53 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
 
   return html`
     <fieldset>
-      <legend>Education</legend>
+      <legend>${t("education.legend")}</legend>
       ${education.map(
         (edu, i) => html`
           <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-xs uppercase tracking-wide">Education #${i + 1}</h3>
+              <h3 class="font-bold text-xs uppercase tracking-wide">${t("education.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">
-                <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+                <button type="button" aria-label=${t("common.moveUp")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(education, i, i - 1))}>↑</button>
-                <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === education.length - 1}
+                <button type="button" aria-label=${t("common.moveDown")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === education.length - 1}
                   onClick=${() => onChange(move(education, i, i + 1))}>↓</button>
-                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>Remove</button>
+                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>${t("common.remove")}</button>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Institution
-                <input type="text" value=${edu.institution ?? ""} placeholder="University of Example"
+                ${t("education.institution")}
+                <input type="text" value=${edu.institution ?? ""} placeholder=${t("education.ph.institution")}
                   onInput=${(e: Event) => onChange(update(education, i, { institution: val(e) }))} />
               </label>
               <label>
-                Website
-                <input type="url" value=${edu.url ?? ""} placeholder="https://mit.edu"
+                ${t("education.website")}
+                <input type="url" value=${edu.url ?? ""} placeholder=${t("education.ph.website")}
                   onInput=${(e: Event) => onChange(update(education, i, { url: val(e) }))} />
               </label>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Degree
-                <input type="text" value=${edu.studyType ?? ""} placeholder="B.Sc., M.Sc., Ph.D."
+                ${t("education.degree")}
+                <input type="text" value=${edu.studyType ?? ""} placeholder=${t("education.ph.degree")}
                   onInput=${(e: Event) => onChange(update(education, i, { studyType: val(e) }))} />
               </label>
               <label>
-                Field of Study
-                <input type="text" value=${edu.area ?? ""} placeholder="Computer Science"
+                ${t("education.fieldOfStudy")}
+                <input type="text" value=${edu.area ?? ""} placeholder=${t("education.ph.fieldOfStudy")}
                   onInput=${(e: Event) => onChange(update(education, i, { area: val(e) }))} />
               </label>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Start Date
+                ${t("education.startDate")}
                 <input type="month" value=${edu.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(education, i, { startDate: val(e) }))} />
               </label>
               <div class="flex-1">
                 <label>
-                  End Date
+                  ${t("education.endDate")}
                   <input type="month" value=${edu.endDate ?? ""}
                     disabled=${edu.endDate === undefined}
                     onChange=${(e: Event) => onChange(update(education, i, { endDate: val(e) }))} />
@@ -90,27 +91,27 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
                       const current = (e.target as HTMLInputElement).checked;
                       onChange(update(education, i, { endDate: current ? undefined : "" }));
                     }} />
-                  Current
+                  ${t("education.current")}
                 </label>
               </div>
             </div>
             <label>
-              GPA / Score
+              ${t("education.score")}
               <input type="text" value=${edu.score ?? ""} placeholder="3.8"
                 onInput=${(e: Event) => onChange(update(education, i, { score: val(e) }))} />
             </label>
             <label>
-              Courses
+              ${t("education.courses")}
               <${ListInput}
                 items=${edu.courses ?? []}
-                placeholder="Add a course and press Enter"
+                placeholder=${t("education.ph.courses")}
                 onChange=${(items: string[]) => onChange(update(education, i, { courses: items }))}
               />
             </label>
           </div>
         `
       )}
-      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>+ Add Education</button>
+      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>${t("education.add")}</button>
     </fieldset>
   `;
 }

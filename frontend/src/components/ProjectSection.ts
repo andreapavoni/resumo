@@ -1,6 +1,7 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
 import { TagInput } from "./TagInput.js";
+import { t } from "../i18n.js";
 import type { Project } from "../types.js";
 
 interface ProjectSectionProps {
@@ -39,51 +40,51 @@ export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
 
   return html`
     <fieldset>
-      <legend>Projects</legend>
+      <legend>${t("projects.legend")}</legend>
       ${projects.map(
         (project, i) => html`
           <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-xs uppercase tracking-wide">Project #${i + 1}</h3>
+              <h3 class="font-bold text-xs uppercase tracking-wide">${t("projects.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">
-                <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+                <button type="button" aria-label=${t("common.moveUp")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(projects, i, i - 1))}>↑</button>
-                <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === projects.length - 1}
+                <button type="button" aria-label=${t("common.moveDown")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === projects.length - 1}
                   onClick=${() => onChange(move(projects, i, i + 1))}>↓</button>
-                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>Remove</button>
+                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>${t("common.remove")}</button>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Name
-                <input type="text" value=${project.name ?? ""} placeholder="My Project"
+                ${t("projects.name")}
+                <input type="text" value=${project.name ?? ""} placeholder=${t("projects.ph.name")}
                   onInput=${(e: Event) => onChange(update(projects, i, { name: val(e) }))} />
               </label>
               <label>
-                Entity
-                <input type="text" value=${project.entity ?? ""} placeholder="Company or org"
+                ${t("projects.entity")}
+                <input type="text" value=${project.entity ?? ""} placeholder=${t("projects.ph.entity")}
                   onInput=${(e: Event) => onChange(update(projects, i, { entity: val(e) }))} />
               </label>
               <label>
-                Type
-                <input type="text" value=${project.type ?? ""} placeholder="application, talk..."
+                ${t("projects.type")}
+                <input type="text" value=${project.type ?? ""} placeholder=${t("projects.ph.type")}
                   onInput=${(e: Event) => onChange(update(projects, i, { type: val(e) }))} />
               </label>
             </div>
             <label>
-              URL
-              <input type="url" value=${project.url ?? ""} placeholder="https://github.com/user/project"
+              ${t("projects.url")}
+              <input type="url" value=${project.url ?? ""} placeholder=${t("projects.ph.url")}
                 onInput=${(e: Event) => onChange(update(projects, i, { url: val(e) }))} />
             </label>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Start Date
+                ${t("projects.startDate")}
                 <input type="month" value=${project.startDate ?? ""}
                   onChange=${(e: Event) => onChange(update(projects, i, { startDate: val(e) }))} />
               </label>
               <div class="flex-1">
                 <label>
-                  End Date
+                  ${t("projects.endDate")}
                   <input type="month" value=${project.endDate ?? ""}
                     disabled=${project.endDate === undefined}
                     onChange=${(e: Event) => onChange(update(projects, i, { endDate: val(e) }))} />
@@ -94,35 +95,35 @@ export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
                       const current = (e.target as HTMLInputElement).checked;
                       onChange(update(projects, i, { endDate: current ? undefined : "" }));
                     }} />
-                  Ongoing
+                  ${t("projects.ongoing")}
                 </label>
               </div>
             </div>
             <label>
-              Description
-              <textarea rows="1" class="resize-none overflow-hidden" placeholder="Short summary of the project..."
+              ${t("projects.description")}
+              <textarea rows="1" class="resize-none overflow-hidden" placeholder=${t("projects.ph.description")}
                 ref=${(el: HTMLTextAreaElement | null) => el && autoResize(el)}
                 onInput=${(e: Event) => { autoResize(e.target as HTMLTextAreaElement); onChange(update(projects, i, { description: val(e) })); }}
               >${project.description ?? ""}</textarea>
             </label>
             <label>
-              Roles
+              ${t("projects.roles")}
               <${TagInput}
                 items=${project.roles ?? []}
-                placeholder="Add a role and press Enter"
+                placeholder=${t("projects.ph.roles")}
                 onChange=${(items: string[]) => onChange(update(projects, i, { roles: items }))}
               />
             </label>
             <label>
-              Keywords
+              ${t("projects.keywords")}
               <${TagInput}
                 items=${project.keywords ?? []}
-                placeholder="Add a keyword and press Enter"
+                placeholder=${t("projects.ph.keywords")}
                 onChange=${(items: string[]) => onChange(update(projects, i, { keywords: items }))}
               />
             </label>
             <label>
-              Highlights
+              ${t("projects.highlights")}
               <${ListInput}
                 items=${project.highlights ?? []}
                 onChange=${(items: string[]) => onChange(update(projects, i, { highlights: items }))}
@@ -131,7 +132,7 @@ export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
           </div>
         `
       )}
-      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>+ Add Project</button>
+      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>${t("projects.add")}</button>
     </fieldset>
   `;
 }

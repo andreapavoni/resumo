@@ -1,4 +1,5 @@
 import { html } from "htm/preact";
+import { t } from "../i18n.js";
 import type { Certificate } from "../types.js";
 
 interface CertificateSectionProps {
@@ -32,46 +33,46 @@ export function CertificateSection({ certificates, onChange }: CertificateSectio
 
   return html`
     <fieldset>
-      <legend>Certificates</legend>
+      <legend>${t("certificates.legend")}</legend>
       ${certificates.map(
         (cert, i) => html`
           <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
             <div class="flex justify-between items-center mb-2">
-              <h3 class="font-bold text-xs uppercase tracking-wide">Certificate #${i + 1}</h3>
+              <h3 class="font-bold text-xs uppercase tracking-wide">${t("certificates.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">
-                <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+                <button type="button" aria-label=${t("common.moveUp")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                   onClick=${() => onChange(move(certificates, i, i - 1))}>↑</button>
-                <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === certificates.length - 1}
+                <button type="button" aria-label=${t("common.moveDown")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === certificates.length - 1}
                   onClick=${() => onChange(move(certificates, i, i + 1))}>↓</button>
-                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>Remove</button>
+                <button type="button" class="text-appaccent border-appaccent hover:bg-appaccent/10" onClick=${() => removeEntry(i)}>${t("common.remove")}</button>
               </div>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
-                Name
-                <input type="text" value=${cert.name ?? ""} placeholder="Certified Kubernetes Administrator"
+                ${t("certificates.name")}
+                <input type="text" value=${cert.name ?? ""} placeholder=${t("certificates.ph.name")}
                   onInput=${(e: Event) => onChange(update(certificates, i, { name: val(e) }))} />
               </label>
               <label>
-                Issuer
-                <input type="text" value=${cert.issuer ?? ""} placeholder="CNCF"
+                ${t("certificates.issuer")}
+                <input type="text" value=${cert.issuer ?? ""} placeholder=${t("certificates.ph.issuer")}
                   onInput=${(e: Event) => onChange(update(certificates, i, { issuer: val(e) }))} />
               </label>
               <label>
-                Date
+                ${t("certificates.date")}
                 <input type="month" value=${cert.date ?? ""}
                   onChange=${(e: Event) => onChange(update(certificates, i, { date: val(e) }))} />
               </label>
             </div>
             <label>
-              URL
-              <input type="url" value=${cert.url ?? ""} placeholder="https://example.com/cert"
+              ${t("certificates.url")}
+              <input type="url" value=${cert.url ?? ""} placeholder=${t("certificates.ph.url")}
                 onInput=${(e: Event) => onChange(update(certificates, i, { url: val(e) }))} />
             </label>
           </div>
         `
       )}
-      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>+ Add Certificate</button>
+      <button type="button" class="w-full border-2 border-black font-bold hover:bg-appbg" onClick=${addEntry}>${t("certificates.add")}</button>
     </fieldset>
   `;
 }

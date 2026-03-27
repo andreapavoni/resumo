@@ -1,5 +1,6 @@
 import { html } from "htm/preact";
 import { useRef, useState } from "preact/hooks";
+import { t } from "../i18n.js";
 
 interface ListInputProps {
   items: string[];
@@ -69,17 +70,17 @@ export function ListInput({ items, onChange, placeholder }: ListInputProps) {
                   onBlur=${(e: FocusEvent) => saveEdit(i, (e.target as HTMLInputElement).value)}
                   ref=${(el: HTMLInputElement | null) => el?.focus()}
                 />`
-              : html`<button type="button" class="flex-1 cursor-text px-0.5 py-0.5 rounded-sm hover:bg-black/5 text-left font-normal border-none bg-transparent" aria-label="Edit item" onClick=${() => setEditingIndex(i)}>${item}</button>`
+              : html`<button type="button" class="flex-1 cursor-text px-0.5 py-0.5 rounded-sm hover:bg-black/5 text-left font-normal border-none bg-transparent" aria-label=${t("common.editItem")} onClick=${() => setEditingIndex(i)}>${item}</button>`
             }
             <div class="flex gap-0.5 items-center shrink-0">
-              <button type="button" aria-label="Move up" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
+              <button type="button" aria-label=${t("common.moveUp")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === 0}
                 onClick=${() => onChange(move(items, i, i - 1))}>↑</button>
-              <button type="button" aria-label="Move down" class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === items.length - 1}
+              <button type="button" aria-label=${t("common.moveDown")} class="px-1.5 py-0.5 text-xs leading-none min-w-0 disabled:opacity-30" disabled=${i === items.length - 1}
                 onClick=${() => onChange(move(items, i, i + 1))}>↓</button>
               <button type="button"
                 class="border-none bg-transparent text-gray-400 px-0.5 text-base leading-none cursor-pointer hover:text-gray-900 hover:bg-transparent"
                 onClick=${() => onChange(items.filter((_: string, j: number) => j !== i))}
-                aria-label="Remove">\u00d7</button>
+                aria-label=${t("common.remove")}>\u00d7</button>
             </div>
           </div>
         `
@@ -89,10 +90,10 @@ export function ListInput({ items, onChange, placeholder }: ListInputProps) {
           ref=${inputRef}
           type="text"
           class="flex-1 border-none rounded-none mt-0 text-sm"
-          placeholder=${placeholder ?? "Add a bullet point and press Enter"}
+          placeholder=${placeholder ?? t("common.listPlaceholder")}
           onKeyDown=${handleKeyDown}
         />
-        <button type="button" class="border-none border-l border-black/20 rounded-none bg-gray-100 text-xs px-3 py-1.5 font-medium hover:bg-gray-200" onClick=${addItem}>Add</button>
+        <button type="button" class="border-none border-l border-black/20 rounded-none bg-gray-100 text-xs px-3 py-1.5 font-medium hover:bg-gray-200" onClick=${addItem}>${t("common.add")}</button>
       </div>
     </div>
   `;
