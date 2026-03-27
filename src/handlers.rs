@@ -59,6 +59,21 @@ pub async fn render_resume(
     if let Some(ref mut edu) = resume.education {
         edu.sort_by(|a, b| b.start_date.cmp(&a.start_date));
     }
+    if let Some(ref mut vol) = resume.volunteer {
+        vol.sort_by(|a, b| b.start_date.cmp(&a.start_date));
+    }
+    if let Some(ref mut proj) = resume.projects {
+        proj.sort_by(|a, b| b.start_date.cmp(&a.start_date));
+    }
+    if let Some(ref mut pubs) = resume.publications {
+        pubs.sort_by(|a, b| b.release_date.cmp(&a.release_date));
+    }
+    if let Some(ref mut awards) = resume.awards {
+        awards.sort_by(|a, b| b.date.cmp(&a.date));
+    }
+    if let Some(ref mut certs) = resume.certificates {
+        certs.sort_by(|a, b| b.date.cmp(&a.date));
+    }
 
     let t = translations_for(&query.locale);
     render_themed(query.theme, resume, t).map(Html).map_err(|err| {

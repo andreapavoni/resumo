@@ -119,6 +119,42 @@
     margin: 0 0 0.5rem 1rem;
     border: solid 1px gray;
   }
+
+  .resume .entry-meta {
+    font-size: 9.5pt;
+    color: #6b7280;
+    margin: 0.15rem 0 0;
+    font-style: italic;
+  }
+
+  .resume .entry-keywords {
+    font-size: 9.5pt;
+    color: #6b7280;
+    margin: 0.2rem 0 0;
+  }
+
+  .resume blockquote {
+    margin: 0.25rem 0 0.15rem 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 2px solid #d1d5db;
+    font-style: italic;
+    color: #4b5563;
+  }
+
+  .resume .ref-name {
+    font-size: 10pt;
+    color: #6b7280;
+    margin: 0.1rem 0 0;
+  }
+
+  .resume .entry h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .resume .entry h3 a:hover {
+    text-decoration: underline;
+  }
 </style>
 <article class="resume">
   {% if let Some(basics) = resume.basics %}
@@ -152,6 +188,15 @@
       </span>
       {% endif %}
       {% endif %}
+      {% if let Some(profiles) = basics.profiles %}
+      {% for profile in profiles %}
+      {% if let Some(url) = profile.url %}
+      <a href="{{ url }}">{{ profile.network.as_deref().unwrap_or(&url) }}</a>
+      {% else if let Some(username) = profile.username %}
+      <span>{{ profile.network.as_deref().unwrap_or("") }}: {{ username }}</span>
+      {% endif %}
+      {% endfor %}
+      {% endif %}
     </address>
   </header>
 
@@ -167,16 +212,16 @@
   {% if !skill_list.is_empty() %}
   <section class="resume-section" aria-label="{{ t.skills }}">
     <h2>{{ t.skills }}</h2>
-      {% for skill in skill_list %}
+    {% for skill in skill_list %}
     <div class="skill-group">
       {% if let Some(name) = skill.name %}
       <strong>{{ name }}{% if skill.keywords.is_some() %}:{% endif %}</strong>
-        {% endif %}
-          {% if let Some(keywords) = skill.keywords %}
-        {{ keywords.join(", ") }}
-          {% endif %}
+      {% endif %}
+      {% if let Some(keywords) = skill.keywords %}
+      {{ keywords.join(", ") }}
+      {% endif %}
     </div>
-      {% endfor %}
+    {% endfor %}
   </section>
   {% endif %}
   {% endif %}
@@ -225,19 +270,54 @@
   {% endif %}
   {% endif %}
 
-  {% if let Some(lang_list) = resume.languages %}
-  {% if !lang_list.is_empty() %}
-  <section class="resume-section" aria-label="{{ t.languages }}">
-    <h2>{{ t.languages }}</h2>
-    {% for lang in lang_list %}
-    <div class="skill-group">
-      {% if let Some(name) = lang.language %}
-      <strong>{{ name }}:</strong>
+  {% if let Some(project_list) = resume.projects %}
+  {% if !project_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.projects }}">
+    <h2>{{ t.projects }}</h2>
+    {% for proj in project_list %}
+    <article class="entry">
+      <header>
+        <h3>
+          {% if let Some(url) = proj.url %}
+          <a href="{{ url }}">{{ proj.name.as_deref().unwrap_or("") }}</a>
+          {% else %}
+          {{ proj.name.as_deref().unwrap_or("") }}
+          {% endif %}
+          {% if let Some(entity) = proj.entity %}
+          <span class="org">· {{ entity }}</span>
+          {% endif %}
+        </h3>
+        {% if proj.start_date.is_some() || proj.end_date.is_some() %}
+        <p class="date-range">
+          {% match proj.start_date %}
+          {% when Some with (d) %}<time>{{ d }}</time>
+          {% when None %}
+          {% endmatch %}
+          –
+          {% match proj.end_date %}
+          {% when Some with (d) %}<time>{{ d }}</time>
+          {% when None %}{{ t.present }}
+          {% endmatch %}
+        </p>
+        {% endif %}
+      </header>
+      {% if let Some(desc) = proj.description %}
+      <p>{{ desc }}</p>
       {% endif %}
-      {% if let Some(fluency) = lang.fluency %}
-      {{ fluency }}
+      {% if let Some(roles) = proj.roles %}
+      <p class="entry-meta">{{ roles.join(", ") }}</p>
       {% endif %}
-    </div>
+      {% if let Some(highlights) = proj.highlights %}
+      <ul>
+        {% for h in highlights %}
+        <li>{{ h }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% if let Some(keywords) = proj.keywords %}
+      <p class="entry-keywords">{{ keywords.join(" · ") }}</p>
+      {% endif %}
+    </article>
     {% endfor %}
   </section>
   {% endif %}
@@ -273,6 +353,185 @@
       </header>
       {% if let Some(score) = edu.score %}
       <p class="score">{{ t.gpa_label }}{{ score }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(vol_list) = resume.volunteer %}
+  {% if !vol_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.volunteer }}">
+    <h2>{{ t.volunteer }}</h2>
+    {% for vol in vol_list %}
+    <article class="entry">
+      <header>
+        <h3>
+          {{ vol.position.as_deref().unwrap_or("") }}
+          {% if let Some(org) = vol.organization %}
+          <span class="org">· {{ org }}</span>
+          {% endif %}
+        </h3>
+        <p class="date-range">
+          {% match vol.start_date %}
+          {% when Some with (d) %}<time>{{ d }}</time>
+          {% when None %}
+          {% endmatch %}
+          –
+          {% match vol.end_date %}
+          {% when Some with (d) %}<time>{{ d }}</time>
+          {% when None %}{{ t.present }}
+          {% endmatch %}
+        </p>
+      </header>
+      {% if let Some(summary) = vol.summary %}
+      <p>{{ summary }}</p>
+      {% endif %}
+      {% if let Some(highlights) = vol.highlights %}
+      <ul>
+        {% for h in highlights %}
+        <li>{{ h }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(award_list) = resume.awards %}
+  {% if !award_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.awards }}">
+    <h2>{{ t.awards }}</h2>
+    {% for award in award_list %}
+    <article class="entry">
+      <header>
+        <h3>{{ award.title.as_deref().unwrap_or("") }}</h3>
+        {% if award.awarder.is_some() || award.date.is_some() %}
+        <p class="date-range">
+          {% if let Some(awarder) = award.awarder %}{{ awarder }}{% endif %}
+          {% if award.awarder.is_some() && award.date.is_some() %} · {% endif %}
+          {% if let Some(d) = award.date %}<time>{{ d }}</time>{% endif %}
+        </p>
+        {% endif %}
+      </header>
+      {% if let Some(summary) = award.summary %}
+      <p>{{ summary }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(cert_list) = resume.certificates %}
+  {% if !cert_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.certificates }}">
+    <h2>{{ t.certificates }}</h2>
+    {% for cert in cert_list %}
+    <article class="entry">
+      <header>
+        <h3>
+          {% if let Some(url) = cert.url %}
+          <a href="{{ url }}">{{ cert.name.as_deref().unwrap_or("") }}</a>
+          {% else %}
+          {{ cert.name.as_deref().unwrap_or("") }}
+          {% endif %}
+        </h3>
+        {% if cert.issuer.is_some() || cert.date.is_some() %}
+        <p class="date-range">
+          {% if let Some(issuer) = cert.issuer %}{{ issuer }}{% endif %}
+          {% if cert.issuer.is_some() && cert.date.is_some() %} · {% endif %}
+          {% if let Some(d) = cert.date %}<time>{{ d }}</time>{% endif %}
+        </p>
+        {% endif %}
+      </header>
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(pub_list) = resume.publications %}
+  {% if !pub_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.publications }}">
+    <h2>{{ t.publications }}</h2>
+    {% for pub_ in pub_list %}
+    <article class="entry">
+      <header>
+        <h3>
+          {% if let Some(url) = pub_.url %}
+          <a href="{{ url }}">{{ pub_.name.as_deref().unwrap_or("") }}</a>
+          {% else %}
+          {{ pub_.name.as_deref().unwrap_or("") }}
+          {% endif %}
+        </h3>
+        {% if pub_.publisher.is_some() || pub_.release_date.is_some() %}
+        <p class="date-range">
+          {% if let Some(publisher) = pub_.publisher %}{{ publisher }}{% endif %}
+          {% if pub_.publisher.is_some() && pub_.release_date.is_some() %} · {% endif %}
+          {% if let Some(d) = pub_.release_date %}<time>{{ d }}</time>{% endif %}
+        </p>
+        {% endif %}
+      </header>
+      {% if let Some(summary) = pub_.summary %}
+      <p>{{ summary }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(lang_list) = resume.languages %}
+  {% if !lang_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.languages }}">
+    <h2>{{ t.languages }}</h2>
+    {% for lang in lang_list %}
+    <div class="skill-group">
+      {% if let Some(name) = lang.language %}
+      <strong>{{ name }}:</strong>
+      {% endif %}
+      {% if let Some(fluency) = lang.fluency %}
+      {{ fluency }}
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(interest_list) = resume.interests %}
+  {% if !interest_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.interests }}">
+    <h2>{{ t.interests }}</h2>
+    {% for interest in interest_list %}
+    <div class="skill-group">
+      {% if let Some(name) = interest.name %}
+      <strong>{{ name }}{% if interest.keywords.is_some() %}:{% endif %}</strong>
+      {% endif %}
+      {% if let Some(keywords) = interest.keywords %}
+      {{ keywords.join(", ") }}
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endif %}
+
+  {% if let Some(ref_list) = resume.references %}
+  {% if !ref_list.is_empty() %}
+  <section class="resume-section" aria-label="{{ t.references }}">
+    <h2>{{ t.references }}</h2>
+    {% for ref_ in ref_list %}
+    <article class="entry">
+      {% if let Some(reference) = ref_.reference %}
+      <blockquote>{{ reference }}</blockquote>
+      {% endif %}
+      {% if let Some(name) = ref_.name %}
+      <p class="ref-name">— {{ name }}</p>
       {% endif %}
     </article>
     {% endfor %}

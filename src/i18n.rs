@@ -8,6 +8,13 @@ pub struct Translations {
     pub present: &'static str,
     pub gpa_label: &'static str,
     pub in_field: &'static str,
+    pub volunteer: &'static str,
+    pub projects: &'static str,
+    pub awards: &'static str,
+    pub certificates: &'static str,
+    pub publications: &'static str,
+    pub interests: &'static str,
+    pub references: &'static str,
 }
 
 static EN: Translations = Translations {
@@ -20,6 +27,13 @@ static EN: Translations = Translations {
     present: "Present",
     gpa_label: "GPA: ",
     in_field: "in",
+    volunteer: "Volunteer",
+    projects: "Projects",
+    awards: "Awards",
+    certificates: "Certificates",
+    publications: "Publications",
+    interests: "Interests",
+    references: "References",
 };
 
 static IT: Translations = Translations {
@@ -32,6 +46,13 @@ static IT: Translations = Translations {
     present: "In corso",
     gpa_label: "Voto: ",
     in_field: "in",
+    volunteer: "Volontariato",
+    projects: "Progetti",
+    awards: "Premi",
+    certificates: "Certificazioni",
+    publications: "Pubblicazioni",
+    interests: "Interessi",
+    references: "Referenze",
 };
 
 pub fn translations_for(locale: &str) -> &'static Translations {
