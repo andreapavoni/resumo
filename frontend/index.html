@@ -213,11 +213,12 @@
   <script>
     (function () {
       var locale = "en";
+      var hasStored = false;
       try {
         var stored = localStorage.getItem("resumo:locale");
-        if (stored) locale = JSON.parse(stored);
+        if (stored) { locale = JSON.parse(stored); hasStored = true; }
       } catch (e) {}
-      if (locale === "en" && navigator.language && navigator.language.toLowerCase().startsWith("it")) {
+      if (!hasStored && navigator.language && navigator.language.toLowerCase().startsWith("it")) {
         locale = "it";
       }
 
