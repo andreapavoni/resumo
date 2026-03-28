@@ -51,6 +51,16 @@ function exportJson(resume: Resume) {
   URL.revokeObjectURL(url);
 }
 
+async function loadDemo(setResume: (r: Resume) => void) {
+  try {
+    const res = await fetch("/demo-resume.json");
+    const resume = await res.json() as Resume;
+    setResume(resume);
+  } catch {
+    console.error("Failed to load demo resume");
+  }
+}
+
 declare const lucide: any;
 
 export function App() {
@@ -158,6 +168,7 @@ export function App() {
             onChange=${setResume}
             onImport=${() => importJson(setResume)}
             onExport=${() => exportJson(resume)}
+            onLoadDemo=${() => loadDemo(setResume)}
             onReset=${() => {
               if (!confirm(t("app.resetConfirm"))) return;
               localStorage.removeItem(STORAGE_KEY);
@@ -171,7 +182,7 @@ export function App() {
         </div>
         <!-- Preview pane -->
         <div class="preview-pane md:ml-[45%] p-4 md:p-8 md:pb-12 ${activeTab === "preview" ? "" : "hidden md:block"}">
-          <${Preview} resume=${resume} theme=${theme} locale=${locale} />
+          <${Preview} resume=${resume} theme=${theme} locale=${locale} onLoadDemo=${() => loadDemo(setResume)} />
         </div>
       </div>
 

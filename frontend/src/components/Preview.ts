@@ -8,9 +8,10 @@ interface PreviewProps {
   resume: Resume;
   theme: Theme;
   locale: string;
+  onLoadDemo: () => void;
 }
 
-export function Preview({ resume, theme, locale }: PreviewProps) {
+export function Preview({ resume, theme, locale, onLoadDemo }: PreviewProps) {
   const [previewHtml, setPreviewHtml] = useState<string>("");
   const abortRef = useRef<AbortController | null>(null);
 
@@ -34,7 +35,17 @@ export function Preview({ resume, theme, locale }: PreviewProps) {
   }, [resume, theme, locale]);
 
   if (!previewHtml) {
-    return html`<p class="text-center italic text-gray-400 mt-16">${t("app.previewPlaceholder")}</p>`;
+    return html`
+      <div class="text-center mt-16">
+        <p class="italic text-gray-400">${t("app.previewPlaceholder")}</p>
+        <button type="button"
+          class="mt-4 inline-flex items-center gap-2 px-4 py-2 border-2 border-black rounded-sm font-bold hover:bg-gray-100 transition-colors"
+          onClick=${onLoadDemo}>
+          <i data-lucide="play" class="w-4 h-4"></i>
+          ${t("app.loadDemo")}
+        </button>
+      </div>
+    `;
   }
 
   return html`<div dangerouslySetInnerHTML=${{ __html: previewHtml }}></div>`;

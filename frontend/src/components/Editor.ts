@@ -22,28 +22,38 @@ interface EditorProps {
   onChange: (resume: Resume) => void;
   onImport: () => void;
   onExport: () => void;
+  onLoadDemo: () => void;
   onReset: () => void;
 }
 
-export function Editor({ resume, onChange, onImport, onExport, onReset }: EditorProps) {
+export function Editor({ resume, onChange, onImport, onExport, onLoadDemo, onReset }: EditorProps) {
+  const isEmpty = !resume.basics?.name && !resume.work?.length;
+
   return html`
     <div>
       <div class="flex items-center gap-2 mb-4">
         <button type="button" class="flex items-center gap-2 hover:text-appaccent transition-colors"
           onClick=${onImport} title=${t("app.importJson")} aria-label=${t("app.importJson")}>
           <i data-lucide="file-up" class="w-4 h-4"></i>
-          ${t("app.import")}
+          <span class="hidden sm:inline">${t("app.import")}</span>
         </button>
         <button type="button" class="flex items-center gap-2 bg-appaccent text-white border-appaccent font-bold hover:opacity-90 transition-opacity"
           onClick=${onExport} title=${t("app.exportJson")} aria-label=${t("app.exportJson")}>
           <i data-lucide="file-down" class="w-4 h-4"></i>
-          ${t("app.export")}
+          <span class="hidden sm:inline">${t("app.export")}</span>
         </button>
         <button type="button" class="flex items-center gap-2 hover:text-appaccent transition-colors"
           onClick=${onReset} title=${t("app.resetData")} aria-label=${t("app.resetData")}>
           <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-          ${t("app.reset")}
+          <span class="hidden sm:inline">${t("app.reset")}</span>
         </button>
+        ${isEmpty && html`
+          <button type="button" class="flex items-center gap-2 hover:text-appaccent transition-colors"
+            onClick=${onLoadDemo}>
+            <i data-lucide="play" class="w-4 h-4"></i>
+            ${t("app.loadDemo")}
+          </button>
+        `}
       </div>
       <${BasicsForm}
         basics=${resume.basics ?? {}}

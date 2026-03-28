@@ -546,12 +546,12 @@
 		{% if !ref_list.is_empty() %}
 		<section class="resume-section" aria-label="{{ t.references }}">
 			<h2>{{ t.references }}</h2>
-			{% for ref_ in ref_list %}
+			{% for r in ref_list %}
 			<article class="entry">
-				{% if let Some(reference) = ref_.reference %}
+				{% if let Some(reference) = r.reference %}
 				<blockquote>{{ reference }}</blockquote>
 				{% endif %}
-				{% if let Some(name) = ref_.name %}
+				{% if let Some(name) = r.name %}
 				<p class="ref-name">— {{ name }}</p>
 				{% endif %}
 			</article>
