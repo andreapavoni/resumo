@@ -33,10 +33,10 @@
         <span class="font-extrabold text-2xl tracking-tight">Resumo</span>
       </div>
       <nav class="flex items-center gap-4 md:gap-8 font-medium">
-        <a href="#how-it-works" class="hidden md:inline hover:text-appaccent transition-colors">How it works</a>
-        <a href="#features" class="hidden md:inline hover:text-appaccent transition-colors">Features</a>
+        <a href="#how-it-works" class="hidden md:inline hover:text-appaccent transition-colors" data-i18n="nav.howItWorks">How it works</a>
+        <a href="#features" class="hidden md:inline hover:text-appaccent transition-colors" data-i18n="nav.features">Features</a>
         <a href="/app"
-          class="bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-sm hover:bg-gray-800 transition-colors text-sm md:text-base">Build
+          class="bg-black text-white px-4 py-2 md:px-5 md:py-2.5 rounded-sm hover:bg-gray-800 transition-colors text-sm md:text-base" data-i18n="nav.cta">Build
           Your Resume</a>
       </nav>
     </div>
@@ -48,27 +48,27 @@
     <!-- Hero Section -->
     <section class="pt-24 pb-16 px-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
       <div class="max-w-xl">
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6">
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6" data-i18n-html="hero.title">
           Build your <br>resume. <span class="text-appaccent">Simply.</span>
         </h1>
-        <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed">
+        <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed" data-i18n="hero.description">
           Skip the word processors and design tools. Resumo generates clean, ATS-friendly resumes — no formatting
           headaches, no accounts, just results.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
           <a href="/app"
             class="bauhaus-border bauhaus-shadow bg-appaccent text-white px-8 py-4 font-bold text-lg text-center flex justify-center items-center gap-2">
-            Build Your Resume
+            <span data-i18n="hero.cta">Build Your Resume</span>
             <i data-lucide="arrow-right" class="w-5 h-5"></i>
           </a>
           <a href="#how-it-works"
-            class="bauhaus-border bg-white text-black px-8 py-4 font-bold text-lg text-center hover:bg-gray-50 transition-colors">
+            class="bauhaus-border bg-white text-black px-8 py-4 font-bold text-lg text-center hover:bg-gray-50 transition-colors" data-i18n="hero.secondary">
             See how it works
           </a>
         </div>
       </div>
 
-      <!-- Abstract App Preview (Based on your screenshot) -->
+      <!-- Abstract App Preview -->
       <div
         class="relative w-full aspect-[4/3] bg-appbg bauhaus-border rounded-lg overflow-hidden flex flex-col shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
         <!-- Browser Bar -->
@@ -109,8 +109,8 @@
     <!-- How it works -->
     <section id="how-it-works" class="py-20 px-6 max-w-7xl mx-auto">
       <div class="text-center mb-16">
-        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4">Focus on content, not formatting.</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto text-lg">Our dual-pane interface lets you write on the left and see
+        <h2 class="text-3xl md:text-5xl font-bold tracking-tight mb-4" data-i18n="how.title">Focus on content, not formatting.</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto text-lg" data-i18n="how.subtitle">Our dual-pane interface lets you write on the left and see
           the pixel-perfect result on the right, instantly.</p>
       </div>
 
@@ -119,24 +119,24 @@
         <div class="bg-appbg bauhaus-border p-8 flex flex-col">
           <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
             1</div>
-          <h3 class="text-2xl font-bold mb-3">Fill the blanks</h3>
-          <p class="text-gray-600 flex-grow">Enter your personal information, experience, and education into our
+          <h3 class="text-2xl font-bold mb-3" data-i18n="step1.title">Fill the blanks</h3>
+          <p class="text-gray-600 flex-grow" data-i18n="step1.desc">Enter your personal information, experience, and education into our
             straightforward, distraction-free form.</p>
         </div>
         <!-- Step 2 -->
         <div class="bg-appbg bauhaus-border p-8 flex flex-col">
           <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
             2</div>
-          <h3 class="text-2xl font-bold mb-3">Live Preview</h3>
-          <p class="text-gray-600 flex-grow">Watch your resume assemble itself in real-time. What you see on the screen
+          <h3 class="text-2xl font-bold mb-3" data-i18n="step2.title">Live Preview</h3>
+          <p class="text-gray-600 flex-grow" data-i18n="step2.desc">Watch your resume assemble itself in real-time. What you see on the screen
             is exactly what you get.</p>
         </div>
         <!-- Step 3 -->
         <div class="bg-appbg bauhaus-border p-8 flex flex-col">
           <div class="w-12 h-12 bg-black text-white flex items-center justify-center font-bold text-xl rounded-sm mb-6">
             3</div>
-          <h3 class="text-2xl font-bold mb-3">Export & Go</h3>
-          <p class="text-gray-600 flex-grow">Download a crisp, ATS-friendly PDF instantly. Your data exports as standard
+          <h3 class="text-2xl font-bold mb-3" data-i18n="step3.title">Export &amp; Go</h3>
+          <p class="text-gray-600 flex-grow" data-i18n-html="step3.desc">Download a crisp, ATS-friendly PDF instantly. Your data exports as standard
             JSON Resume — fully compatible with <a href="https://jsonresume.org"
               class="underline hover:text-black">jsonresume.org</a> for maximum portability.</p>
         </div>
@@ -147,23 +147,23 @@
     <section id="features" class="bg-black text-white py-24 px-6 mt-12">
       <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <div>
-          <h2 class="text-4xl md:text-5xl font-bold mb-6">Your data stays yours.</h2>
-          <p class="text-gray-300 text-lg mb-8 leading-relaxed">
+          <h2 class="text-4xl md:text-5xl font-bold mb-6" data-i18n="features.title">Your data stays yours.</h2>
+          <p class="text-gray-300 text-lg mb-8 leading-relaxed" data-i18n="features.desc">
             No accounts, no databases, no tracking. Your resume data lives in your browser and in the JSON files you
             export. Nothing is stored or shared.
           </p>
           <ul class="space-y-4">
             <li class="flex items-center gap-3">
               <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
-              <span class="font-medium">No account or signup required</span>
+              <span class="font-medium" data-i18n="features.noAccount">No account or signup required</span>
             </li>
             <li class="flex items-center gap-3">
               <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
-              <span class="font-medium">Free and Open Source</span>
+              <span class="font-medium" data-i18n="features.openSource">Free and Open Source</span>
             </li>
             <li class="flex items-center gap-3">
               <i data-lucide="check-circle" class="text-appaccent w-6 h-6"></i>
-              <span class="font-medium">ATS-friendly, print-ready output</span>
+              <span class="font-medium" data-i18n="features.ats">ATS-friendly, print-ready output</span>
             </li>
           </ul>
         </div>
@@ -173,12 +173,12 @@
 
     <!-- Final CTA -->
     <section class="py-24 px-6 text-center max-w-3xl mx-auto">
-      <h2 class="text-4xl font-bold mb-6">Ready to land your next job?</h2>
-      <p class="text-xl text-gray-600 mb-10">No Word. No Canva. No formatting struggles. Just a clean, ATS-ready resume
+      <h2 class="text-4xl font-bold mb-6" data-i18n="cta.title">Ready to land your next job?</h2>
+      <p class="text-xl text-gray-600 mb-10" data-i18n="cta.desc">No Word. No Canva. No formatting struggles. Just a clean, ATS-ready resume
         in minutes.</p>
       <a href="/app"
         class="inline-flex items-center gap-2 bg-black text-white px-10 py-5 font-bold text-xl rounded-sm hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-        Build Your Resume
+        <span data-i18n="cta.button">Build Your Resume</span>
         <i data-lucide="arrow-up-right" class="w-6 h-6"></i>
       </a>
     </section>
@@ -188,13 +188,12 @@
   <footer class="border-t-2 border-black bg-white pt-12 pb-8 px-6 mt-auto">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-2">
-
       </div>
 
       <div class="text-gray-500 text-sm font-medium text-center md:text-left">
         ©2026 a <a href="https://pavonz.com" class="text-black hover:underline">pavonz</a> joint - <a
-          href="https://github.com/andreapavoni/resumo" class="text-black hover:underline">src</a> - No data
-        about the requests is captured or stored.
+          href="https://github.com/andreapavoni/resumo" class="text-black hover:underline">src</a> - <span data-i18n="footer.disclaimer">No data
+        about the requests is captured or stored.</span>
       </div>
 
       <div class="flex items-center gap-4">
@@ -212,7 +211,62 @@
   </footer>
 
   <script>
-    // Initialize Lucide icons
+    (function () {
+      var locale = "en";
+      try {
+        var stored = localStorage.getItem("resumo:locale");
+        if (stored) locale = JSON.parse(stored);
+      } catch (e) {}
+      if (locale === "en" && navigator.language && navigator.language.toLowerCase().startsWith("it")) {
+        locale = "it";
+      }
+
+      var t = {
+        it: {
+          "nav.howItWorks": "Come funziona",
+          "nav.features": "Funzionalità",
+          "nav.cta": "Crea il tuo CV",
+          "hero.title": "Costruisci il tuo <br>curriculum. <span class=\"text-appaccent\">Semplicemente.</span>",
+          "hero.description": "Dimentica i word processor e i tool di design. Resumo genera CV puliti e compatibili con i sistemi ATS — senza problemi di formattazione, senza account, solo risultati.",
+          "hero.cta": "Crea il tuo CV",
+          "hero.secondary": "Come funziona",
+          "how.title": "Concentrati sul contenuto, non sulla formattazione.",
+          "how.subtitle": "La nostra interfaccia a doppio pannello ti permette di scrivere a sinistra e vedere il risultato perfetto a destra, in tempo reale.",
+          "step1.title": "Compila i campi",
+          "step1.desc": "Inserisci le tue informazioni personali, esperienze e formazione nel nostro modulo semplice e senza distrazioni.",
+          "step2.title": "Anteprima in tempo reale",
+          "step2.desc": "Guarda il tuo CV prendere forma in tempo reale. Quello che vedi sullo schermo è esattamente quello che ottieni.",
+          "step3.title": "Esporta e via",
+          "step3.desc": "Scarica subito un PDF nitido e compatibile con i sistemi ATS. I tuoi dati vengono esportati come standard JSON Resume — pienamente compatibile con <a href=\"https://jsonresume.org\" class=\"underline hover:text-black\">jsonresume.org</a> per la massima portabilità.",
+          "features.title": "I tuoi dati restano tuoi.",
+          "features.desc": "Nessun account, nessun database, nessun tracciamento. I dati del tuo CV vivono nel tuo browser e nei file JSON che esporti. Niente viene archiviato o condiviso.",
+          "features.noAccount": "Nessun account o registrazione richiesti",
+          "features.openSource": "Gratuito e Open Source",
+          "features.ats": "Output compatibile con ATS, pronto per la stampa",
+          "cta.title": "Pronto a ottenere il prossimo lavoro?",
+          "cta.desc": "Niente Word. Niente Canva. Niente lotte con la formattazione. Solo un CV pulito e pronto per i sistemi ATS in pochi minuti.",
+          "cta.button": "Crea il tuo CV",
+          "footer.disclaimer": "Nessun dato sulle richieste viene raccolto o archiviato."
+        }
+      };
+
+      var strings = t[locale];
+      if (!strings) return;
+
+      document.documentElement.lang = locale;
+
+      document.querySelectorAll("[data-i18n]").forEach(function (el) {
+        var key = el.getAttribute("data-i18n");
+        if (strings[key] !== undefined) el.textContent = strings[key];
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach(function (el) {
+        var key = el.getAttribute("data-i18n-html");
+        if (strings[key] !== undefined) el.innerHTML = strings[key];
+      });
+    })();
+  </script>
+  <script>
     lucide.createIcons();
   </script>
   <script data-goatcounter="https://resumo.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
