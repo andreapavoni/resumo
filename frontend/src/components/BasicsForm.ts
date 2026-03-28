@@ -41,6 +41,11 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
   function onFileChange(e: Event) {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
+    if (file.size > 1_000_000) {
+      alert(t("basics.photoTooLarge"));
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       onChange(set(basics, { image: reader.result as string }));

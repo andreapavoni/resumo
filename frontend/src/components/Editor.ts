@@ -11,6 +11,7 @@ import { LanguageSection } from "./LanguageSection.js";
 import { InterestSection } from "./InterestSection.js";
 import { ReferenceSection } from "./ReferenceSection.js";
 import { ProjectSection } from "./ProjectSection.js";
+import { t } from "../i18n.js";
 import type {
   Resume, Basics, Work, Volunteer, Education, Award, Certificate,
   Publication, Skill, Language, Interest, Reference, Project,
@@ -19,11 +20,31 @@ import type {
 interface EditorProps {
   resume: Resume;
   onChange: (resume: Resume) => void;
+  onImport: () => void;
+  onExport: () => void;
+  onReset: () => void;
 }
 
-export function Editor({ resume, onChange }: EditorProps) {
+export function Editor({ resume, onChange, onImport, onExport, onReset }: EditorProps) {
   return html`
     <div>
+      <div class="flex items-center gap-2 mb-4">
+        <button type="button" class="flex items-center gap-2 hover:text-appaccent transition-colors"
+          onClick=${onImport} title=${t("app.importJson")} aria-label=${t("app.importJson")}>
+          <i data-lucide="file-up" class="w-4 h-4"></i>
+          ${t("app.import")}
+        </button>
+        <button type="button" class="flex items-center gap-2 bg-appaccent text-white border-appaccent font-bold hover:opacity-90 transition-opacity"
+          onClick=${onExport} title=${t("app.exportJson")} aria-label=${t("app.exportJson")}>
+          <i data-lucide="file-down" class="w-4 h-4"></i>
+          ${t("app.export")}
+        </button>
+        <button type="button" class="flex items-center gap-2 hover:text-appaccent transition-colors"
+          onClick=${onReset} title=${t("app.resetData")} aria-label=${t("app.resetData")}>
+          <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+          ${t("app.reset")}
+        </button>
+      </div>
       <${BasicsForm}
         basics=${resume.basics ?? {}}
         onChange=${(basics: Basics) => onChange({ ...resume, basics })}

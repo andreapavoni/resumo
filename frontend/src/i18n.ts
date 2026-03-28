@@ -1,8 +1,8 @@
 export type Locale = "en" | "it";
 
 export const SUPPORTED_LOCALES: { code: Locale; label: string }[] = [
-  { code: "en", label: "English" },
-  { code: "it", label: "Italiano" },
+  { code: "en", label: "En" },
+  { code: "it", label: "It" },
 ];
 
 let currentLocale: Locale = "en";
@@ -58,6 +58,7 @@ const translations: Translations = {
     "basics.changePhoto": "Change Photo",
     "basics.removePhoto": "Remove",
     "basics.addPhoto": "Add Profile Photo",
+    "basics.photoTooLarge": "Image must be under 1 MB.",
     "basics.ph.name": "Jane Doe",
     "basics.ph.title": "Software Engineer",
     "basics.ph.email": "jane@example.com",
@@ -276,6 +277,7 @@ const translations: Translations = {
     "basics.changePhoto": "Cambia Foto",
     "basics.removePhoto": "Rimuovi",
     "basics.addPhoto": "Aggiungi Foto Profilo",
+    "basics.photoTooLarge": "L'immagine deve essere inferiore a 1 MB.",
     "basics.ph.name": "Mario Rossi",
     "basics.ph.title": "Ingegnere del Software",
     "basics.ph.email": "mario@esempio.com",

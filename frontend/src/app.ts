@@ -138,52 +138,12 @@ export function App() {
 
             <button
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
-              onClick=${() => importJson(setResume)}
-              title=${t("app.importJson")}
-              aria-label=${t("app.importJson")}
-            >
-              <i data-lucide="file-up" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">${t("app.import")}</span>
-            </button>
-
-            <button
-              class="flex items-center gap-2 bg-appaccent text-white border-appaccent font-bold hover:opacity-90 transition-opacity"
-              onClick=${() => exportJson(resume)}
-              title=${t("app.exportJson")}
-              aria-label=${t("app.exportJson")}
-            >
-              <i data-lucide="file-down" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">${t("app.export")}</span>
-            </button>
-
-            <button
-              class="flex items-center gap-2 hover:text-appaccent transition-colors"
               onClick=${() => window.print()}
               title=${t("app.printToPdf")}
               aria-label=${t("app.printToPdf")}
             >
               <i data-lucide="printer" class="w-4 h-4"></i>
               <span class="hidden lg:inline">${t("app.print")}</span>
-            </button>
-
-            <div class="w-px h-6 bg-black/10 hidden md:block mx-1"></div>
-
-            <button
-              class="flex items-center gap-2 hover:text-appaccent transition-colors"
-              onClick=${() => {
-                if (!confirm(t("app.resetConfirm"))) return;
-                localStorage.removeItem(STORAGE_KEY);
-                localStorage.removeItem(THEME_KEY);
-                localStorage.removeItem(LOCALE_KEY);
-                setResume({});
-                setTheme("classic");
-                setLocaleState("en");
-              }}
-              title=${t("app.resetData")}
-              aria-label=${t("app.resetData")}
-            >
-              <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
-              <span class="hidden lg:inline">${t("app.reset")}</span>
             </button>
           </nav>
         </div>
@@ -193,7 +153,21 @@ export function App() {
       <div class="flex-1 relative">
         <!-- Editor pane -->
         <div class="no-print md:fixed md:left-0 md:top-16 md:w-[45%] md:h-[calc(100vh-7rem)] md:overflow-y-auto md:border-r-2 md:border-black p-4 md:p-6 bg-appbg ${activeTab === "edit" ? "" : "hidden md:block"}">
-          <${Editor} resume=${resume} onChange=${setResume} />
+          <${Editor}
+            resume=${resume}
+            onChange=${setResume}
+            onImport=${() => importJson(setResume)}
+            onExport=${() => exportJson(resume)}
+            onReset=${() => {
+              if (!confirm(t("app.resetConfirm"))) return;
+              localStorage.removeItem(STORAGE_KEY);
+              localStorage.removeItem(THEME_KEY);
+              localStorage.removeItem(LOCALE_KEY);
+              setResume({});
+              setTheme("classic");
+              setLocaleState("en");
+            }}
+          />
         </div>
         <!-- Preview pane -->
         <div class="preview-pane md:ml-[45%] p-4 md:p-8 md:pb-12 ${activeTab === "preview" ? "" : "hidden md:block"}">
