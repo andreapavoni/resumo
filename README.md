@@ -2,7 +2,7 @@
 
 A fast, lightweight, ATS-friendly resume builder. Semantic HTML output, browser-native PDF export via Print.
 
-**[TRY IT](https://re-sumo.fly.dev)**
+**[TRY IT](https://resumo.funky.studio)**
 
 ## Tech Stack
 
