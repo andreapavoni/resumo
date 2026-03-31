@@ -113,7 +113,7 @@ fn check_date_range(
             field: format!("{field_prefix}.endDate"),
             code: ErrorCode::EndDateWithoutStart,
         }),
-        (Some(s), Some(e)) if e < s => errors.push(ValidationError {
+        (Some(s), Some(e)) if e.as_end() < s.as_start() => errors.push(ValidationError {
             field: format!("{field_prefix}.endDate"),
             code: ErrorCode::EndDateBeforeStart,
         }),

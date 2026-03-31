@@ -2,10 +2,11 @@ use askama::Template;
 use axum::{Json, extract::Query};
 use serde::{Deserialize, Serialize};
 
-use crate::api::error::AppError;
-use crate::i18n::{Locale, Translations, translations_for};
-use crate::resume::models::Resume;
-use crate::resume::validate::ValidationError;
+use crate::{
+    api::error::AppError,
+    i18n::{Locale, Translations, translations_for},
+    resume::{models::Resume, validate::ValidationError},
+};
 
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
 #[serde(rename_all = "lowercase")]
