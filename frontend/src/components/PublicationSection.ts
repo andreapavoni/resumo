@@ -1,33 +1,15 @@
 import { html } from "htm/preact";
+import { update, val, move, autoResize, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Publication } from "../types.js";
+import type { Publication, ValidationError } from "../types.js";
 
 interface PublicationSectionProps {
   publications: Publication[];
+  errors: ValidationError[];
   onChange: (publications: Publication[]) => void;
 }
 
-function update(publications: Publication[], index: number, patch: Partial<Publication>): Publication[] {
-  return publications.map((p, i) => (i === index ? { ...p, ...patch } : p));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function PublicationSection({ publications, onChange }: PublicationSectionProps) {
+export function PublicationSection({ publications, errors, onChange }: PublicationSectionProps) {
   function addEntry() {
     onChange([...publications, {}]);
   }
@@ -72,7 +54,9 @@ export function PublicationSection({ publications, onChange }: PublicationSectio
             <label>
               ${t("publications.url")}
               <input type="url" value=${pub.url ?? ""} placeholder=${t("publications.ph.url")}
+                class=${fieldError(errors, `publications[${i}].url`) ? "border-red-500" : ""}
                 onInput=${(e: Event) => onChange(update(publications, i, { url: val(e) }))} />
+              ${fieldError(errors, `publications[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `publications[${i}].url`)}</span>`}
             </label>
             <label>
               ${t("publications.summary")}

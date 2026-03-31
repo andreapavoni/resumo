@@ -1,34 +1,16 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
+import { update, val, move, autoResize, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Work } from "../types.js";
+import type { Work, ValidationError } from "../types.js";
 
 interface WorkSectionProps {
   work: Work[];
+  errors: ValidationError[];
   onChange: (work: Work[]) => void;
 }
 
-function update(work: Work[], index: number, patch: Partial<Work>): Work[] {
-  return work.map((w, i) => (i === index ? { ...w, ...patch } : w));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function WorkSection({ work, onChange }: WorkSectionProps) {
+export function WorkSection({ work, errors, onChange }: WorkSectionProps) {
   function addEntry() {
     onChange([...work, {}]);
   }
@@ -69,7 +51,9 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
               <label>
                 ${t("work.website")}
                 <input type="url" value=${job.url ?? ""} placeholder=${t("work.ph.website")}
+                  class=${fieldError(errors, `work[${i}].url`) ? "border-red-500" : ""}
                   onInput=${(e: Event) => onChange(update(work, i, { url: val(e) }))} />
+                ${fieldError(errors, `work[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `work[${i}].url`)}</span>`}
               </label>
               <label>
                 ${t("work.description")}
@@ -93,8 +77,10 @@ export function WorkSection({ work, onChange }: WorkSectionProps) {
                   ${t("work.endDate")}
                   <input type="month" value=${job.endDate ?? ""}
                     disabled=${job.endDate === undefined}
+                    class=${fieldError(errors, `work[${i}].endDate`) ? "border-red-500" : ""}
                     onChange=${(e: Event) => onChange(update(work, i, { endDate: val(e) }))} />
                 </label>
+                ${fieldError(errors, `work[${i}].endDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `work[${i}].endDate`)}</span>`}
                 <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${job.endDate === undefined}
                     onChange=${(e: Event) => {

@@ -1,30 +1,11 @@
 import { html } from "htm/preact";
+import { update, val, move, autoResize } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Reference } from "../types.js";
 
 interface ReferenceSectionProps {
   references: Reference[];
   onChange: (references: Reference[]) => void;
-}
-
-function update(references: Reference[], index: number, patch: Partial<Reference>): Reference[] {
-  return references.map((r, i) => (i === index ? { ...r, ...patch } : r));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function ReferenceSection({ references, onChange }: ReferenceSectionProps) {

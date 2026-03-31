@@ -1,28 +1,15 @@
 import { html } from "htm/preact";
+import { update, val, move, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Certificate } from "../types.js";
+import type { Certificate, ValidationError } from "../types.js";
 
 interface CertificateSectionProps {
   certificates: Certificate[];
+  errors: ValidationError[];
   onChange: (certificates: Certificate[]) => void;
 }
 
-function update(certificates: Certificate[], index: number, patch: Partial<Certificate>): Certificate[] {
-  return certificates.map((c, i) => (i === index ? { ...c, ...patch } : c));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function CertificateSection({ certificates, onChange }: CertificateSectionProps) {
+export function CertificateSection({ certificates, errors, onChange }: CertificateSectionProps) {
   function addEntry() {
     onChange([...certificates, {}]);
   }
@@ -67,7 +54,9 @@ export function CertificateSection({ certificates, onChange }: CertificateSectio
             <label>
               ${t("certificates.url")}
               <input type="url" value=${cert.url ?? ""} placeholder=${t("certificates.ph.url")}
+                class=${fieldError(errors, `certificates[${i}].url`) ? "border-red-500" : ""}
                 onInput=${(e: Event) => onChange(update(certificates, i, { url: val(e) }))} />
+              ${fieldError(errors, `certificates[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `certificates[${i}].url`)}</span>`}
             </label>
           </div>
         `

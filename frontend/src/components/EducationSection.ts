@@ -1,29 +1,16 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
+import { update, val, move, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Education } from "../types.js";
+import type { Education, ValidationError } from "../types.js";
 
 interface EducationSectionProps {
   education: Education[];
+  errors: ValidationError[];
   onChange: (education: Education[]) => void;
 }
 
-function update(edu: Education[], index: number, patch: Partial<Education>): Education[] {
-  return edu.map((e, i) => (i === index ? { ...e, ...patch } : e));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function EducationSection({ education, onChange }: EducationSectionProps) {
+export function EducationSection({ education, errors, onChange }: EducationSectionProps) {
   function addEntry() {
     onChange([...education, {}]);
   }
@@ -57,7 +44,9 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
               <label>
                 ${t("education.website")}
                 <input type="url" value=${edu.url ?? ""} placeholder=${t("education.ph.website")}
+                  class=${fieldError(errors, `education[${i}].url`) ? "border-red-500" : ""}
                   onInput=${(e: Event) => onChange(update(education, i, { url: val(e) }))} />
+                ${fieldError(errors, `education[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `education[${i}].url`)}</span>`}
               </label>
             </div>
             <div class="flex flex-col sm:flex-row gap-3">
@@ -83,8 +72,10 @@ export function EducationSection({ education, onChange }: EducationSectionProps)
                   ${t("education.endDate")}
                   <input type="month" value=${edu.endDate ?? ""}
                     disabled=${edu.endDate === undefined}
+                    class=${fieldError(errors, `education[${i}].endDate`) ? "border-red-500" : ""}
                     onChange=${(e: Event) => onChange(update(education, i, { endDate: val(e) }))} />
                 </label>
+                ${fieldError(errors, `education[${i}].endDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `education[${i}].endDate`)}</span>`}
                 <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${edu.endDate === undefined}
                     onChange=${(e: Event) => {

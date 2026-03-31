@@ -1,7 +1,7 @@
 import { html } from "htm/preact";
 import { useState, useEffect, useRef } from "preact/hooks";
 import { renderResume } from "../api.js";
-import type { Resume, Theme } from "../types.js";
+import type { Resume, Theme, ValidationError } from "../types.js";
 import { t } from "../i18n.js";
 
 interface PreviewProps {
@@ -9,9 +9,10 @@ interface PreviewProps {
   theme: Theme;
   locale: string;
   onLoadDemo: () => void;
+  onErrors: (errors: ValidationError[]) => void;
 }
 
-export function Preview({ resume, theme, locale, onLoadDemo }: PreviewProps) {
+export function Preview({ resume, theme, locale, onLoadDemo, onErrors }: PreviewProps) {
   const [previewHtml, setPreviewHtml] = useState<string>("");
   const abortRef = useRef<AbortController | null>(null);
 
@@ -22,8 +23,9 @@ export function Preview({ resume, theme, locale, onLoadDemo }: PreviewProps) {
       abortRef.current = controller;
 
       try {
-        const html = await renderResume(resume, theme, locale, controller.signal);
-        setPreviewHtml(html);
+        const result = await renderResume(resume, theme, locale, controller.signal);
+        setPreviewHtml(result.html);
+        onErrors(result.errors);
       } catch (err) {
         if (err instanceof Error && err.name !== "AbortError") {
           console.error("Preview render failed:", err);

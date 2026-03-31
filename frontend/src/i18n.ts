@@ -229,6 +229,12 @@ const translations: Translations = {
     "projects.ph.roles": "Add a role and press Enter",
     "projects.ph.keywords": "Add a keyword and press Enter",
 
+    // Validation errors
+    "error.invalid_email": "Invalid email address",
+    "error.invalid_url": "URL must start with http:// or https:// and include a valid domain",
+    "error.end_date_before_start": "End date must not be before start date",
+    "error.end_date_without_start": "End date is set but start date is missing",
+
     // Common
     "common.remove": "Remove",
     "common.moveUp": "Move up",
@@ -448,6 +454,12 @@ const translations: Translations = {
     "projects.ph.description": "Breve riepilogo del progetto...",
     "projects.ph.roles": "Aggiungi un ruolo e premi Invio",
     "projects.ph.keywords": "Aggiungi una parola chiave e premi Invio",
+
+    // Validation errors
+    "error.invalid_email": "Indirizzo email non valido",
+    "error.invalid_url": "L'URL deve iniziare con http:// o https:// e includere un dominio valido",
+    "error.end_date_before_start": "La data di fine non deve essere precedente alla data di inizio",
+    "error.end_date_without_start": "La data di fine è impostata ma manca la data di inizio",
 
     // Common
     "common.remove": "Rimuovi",

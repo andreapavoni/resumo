@@ -1,16 +1,28 @@
-use axum::{body::Body, http::Request, routing::post, Router};
+use axum::{Router, body::Body, http::Request, routing::post};
 use http_body_util::BodyExt;
 use tower::ServiceExt;
 
 fn app() -> Router {
-    Router::new().route("/api/render", post(resumo::handlers::render_resume))
+    Router::new().route("/api/render", post(resumo::api::handlers::render_resume))
 }
 
-async fn post_render(json: &serde_json::Value) -> (u16, String) {
+#[derive(serde::Deserialize)]
+struct RenderResponse {
+    html: String,
+    errors: Vec<ValidationError>,
+}
+
+#[derive(serde::Deserialize)]
+struct ValidationError {
+    field: String,
+    code: String,
+}
+
+async fn post_render(json: &serde_json::Value) -> (u16, RenderResponse) {
     post_render_themed(json, "classic").await
 }
 
-async fn post_render_themed(json: &serde_json::Value, theme: &str) -> (u16, String) {
+async fn post_render_themed(json: &serde_json::Value, theme: &str) -> (u16, RenderResponse) {
     let body = serde_json::to_string(json).unwrap();
     let req = Request::post(format!("/api/render?theme={theme}"))
         .header("content-type", "application/json")
@@ -19,56 +31,58 @@ async fn post_render_themed(json: &serde_json::Value, theme: &str) -> (u16, Stri
     let resp = app().oneshot(req).await.unwrap();
     let status = resp.status().as_u16();
     let bytes = resp.into_body().collect().await.unwrap().to_bytes();
-    (status, String::from_utf8(bytes.to_vec()).unwrap())
+    let response: RenderResponse = serde_json::from_slice(&bytes).unwrap();
+    (status, response)
 }
 
 #[tokio::test]
 async fn empty_resume_returns_200() {
-    let (status, html) = post_render(&serde_json::json!({})).await;
+    let (status, resp) = post_render(&serde_json::json!({})).await;
     assert_eq!(status, 200);
-    assert!(html.contains(r#"<article class="resume">"#));
+    assert!(resp.html.contains(r#"<article class="resume">"#));
+    assert!(resp.errors.is_empty());
 }
 
 #[tokio::test]
 async fn renders_basics_name() {
-    let (status, html) = post_render(&serde_json::json!({
+    let (status, resp) = post_render(&serde_json::json!({
         "basics": { "name": "Jane Doe", "label": "Engineer" }
     }))
     .await;
     assert_eq!(status, 200);
-    assert!(html.contains("<h1>Jane Doe</h1>"));
-    assert!(html.contains("Engineer"));
+    assert!(resp.html.contains("<h1>Jane Doe</h1>"));
+    assert!(resp.html.contains("Engineer"));
 }
 
 #[tokio::test]
 async fn renders_contact_info() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "basics": {
             "email": "jane@example.com",
             "phone": "+1 555 1234"
         }
     }))
     .await;
-    assert!(html.contains("mailto:jane@example.com"));
-    assert!(html.contains("tel:+1 555 1234"));
+    assert!(resp.html.contains("mailto:jane@example.com"));
+    assert!(resp.html.contains("tel:+1 555 1234"));
 }
 
 #[tokio::test]
 async fn renders_location() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "basics": {
             "location": { "city": "Portland", "region": "OR", "countryCode": "US" }
         }
     }))
     .await;
-    assert!(html.contains("Portland"));
-    assert!(html.contains("OR"));
-    assert!(html.contains("US"));
+    assert!(resp.html.contains("Portland"));
+    assert!(resp.html.contains("OR"));
+    assert!(resp.html.contains("US"));
 }
 
 #[tokio::test]
 async fn work_entries_sorted_by_date_descending() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "work": [
             { "position": "Junior", "startDate": "2018-06" },
             { "position": "Senior", "startDate": "2022-01" },
@@ -76,6 +90,7 @@ async fn work_entries_sorted_by_date_descending() {
         ]
     }))
     .await;
+    let html = &resp.html;
     let senior_pos = html.find("Senior").unwrap();
     let mid_pos = html.find("Mid").unwrap();
     let junior_pos = html.find("Junior").unwrap();
@@ -87,13 +102,14 @@ async fn work_entries_sorted_by_date_descending() {
 
 #[tokio::test]
 async fn education_entries_sorted_by_date_descending() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "education": [
             { "institution": "Early College", "startDate": "2010-09" },
             { "institution": "Recent University", "startDate": "2020-09" }
         ]
     }))
     .await;
+    let html = &resp.html;
     let recent_pos = html.find("Recent University").unwrap();
     let early_pos = html.find("Early College").unwrap();
     assert!(
@@ -104,13 +120,14 @@ async fn education_entries_sorted_by_date_descending() {
 
 #[tokio::test]
 async fn missing_dates_sort_to_end() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "work": [
             { "position": "NoDate" },
             { "position": "Dated", "startDate": "2023-01" }
         ]
     }))
     .await;
+    let html = &resp.html;
     let dated_pos = html.find("Dated").unwrap();
     let nodate_pos = html.find("NoDate").unwrap();
     assert!(
@@ -121,34 +138,34 @@ async fn missing_dates_sort_to_end() {
 
 #[tokio::test]
 async fn renders_skills_with_keywords() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "skills": [
             { "name": "Languages", "keywords": ["Rust", "TypeScript", "Python"] }
         ]
     }))
     .await;
-    assert!(html.contains("Languages"));
-    assert!(html.contains("Rust"));
-    assert!(html.contains("TypeScript"));
-    assert!(html.contains("Python"));
+    assert!(resp.html.contains("Languages"));
+    assert!(resp.html.contains("Rust"));
+    assert!(resp.html.contains("TypeScript"));
+    assert!(resp.html.contains("Python"));
 }
 
 #[tokio::test]
 async fn renders_work_highlights() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "work": [{
             "position": "Engineer",
             "highlights": ["Built the thing", "Shipped the feature"]
         }]
     }))
     .await;
-    assert!(html.contains("<li>Built the thing</li>"));
-    assert!(html.contains("<li>Shipped the feature</li>"));
+    assert!(resp.html.contains("<li>Built the thing</li>"));
+    assert!(resp.html.contains("<li>Shipped the feature</li>"));
 }
 
 #[tokio::test]
 async fn dates_display_human_readable() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "work": [{
             "position": "Engineer",
             "startDate": "2022-11",
@@ -156,39 +173,45 @@ async fn dates_display_human_readable() {
         }]
     }))
     .await;
-    assert!(html.contains("Nov 2022"), "Start date should display as 'Nov 2022'");
-    assert!(html.contains("Mar 2024"), "End date should display as 'Mar 2024'");
+    assert!(
+        resp.html.contains("Nov 2022"),
+        "Start date should display as 'Nov 2022'"
+    );
+    assert!(
+        resp.html.contains("Mar 2024"),
+        "End date should display as 'Mar 2024'"
+    );
 }
 
 #[tokio::test]
 async fn missing_end_date_shows_present() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "work": [{
             "position": "Engineer",
             "startDate": "2023-01"
         }]
     }))
     .await;
-    assert!(html.contains("Jan 2023"));
-    assert!(html.contains("Present"));
+    assert!(resp.html.contains("Jan 2023"));
+    assert!(resp.html.contains("Present"));
 }
 
 #[tokio::test]
 async fn renders_profile_image() {
-    let (_, html) = post_render(&serde_json::json!({
+    let (_, resp) = post_render(&serde_json::json!({
         "basics": {
             "name": "Jane",
             "image": "data:image/png;base64,abc123"
         }
     }))
     .await;
-    assert!(html.contains(r#"<img class="resume-photo""#));
-    assert!(html.contains("data:image/png;base64,abc123"));
+    assert!(resp.html.contains(r#"<img class="resume-photo""#));
+    assert!(resp.html.contains("data:image/png;base64,abc123"));
 }
 
 #[tokio::test]
 async fn modern_theme_returns_200() {
-    let (status, html) = post_render_themed(
+    let (status, resp) = post_render_themed(
         &serde_json::json!({
             "basics": { "name": "Jane Doe", "label": "Engineer" }
         }),
@@ -196,21 +219,24 @@ async fn modern_theme_returns_200() {
     )
     .await;
     assert_eq!(status, 200);
-    assert!(html.contains("Jane Doe"));
-    assert!(html.contains("sidebar"), "Modern theme should have a sidebar");
+    assert!(resp.html.contains("Jane Doe"));
+    assert!(
+        resp.html.contains("sidebar"),
+        "Modern theme should have a sidebar"
+    );
 }
 
 #[tokio::test]
 async fn modern_theme_renders_skills_as_pills() {
-    let (_, html) = post_render_themed(
+    let (_, resp) = post_render_themed(
         &serde_json::json!({
             "skills": [{ "name": "Languages", "keywords": ["Rust", "Python"] }]
         }),
         "modern",
     )
     .await;
-    assert!(html.contains(r#"class="pill""#));
-    assert!(html.contains("Rust"));
+    assert!(resp.html.contains(r#"class="pill""#));
+    assert!(resp.html.contains("Rust"));
 }
 
 #[tokio::test]
@@ -221,4 +247,114 @@ async fn invalid_json_returns_error() {
         .unwrap();
     let resp = app().oneshot(req).await.unwrap();
     assert!(resp.status().is_client_error());
+}
+
+// --- Validation tests ---
+
+#[tokio::test]
+async fn validates_invalid_email() {
+    let (status, resp) = post_render(&serde_json::json!({
+        "basics": { "email": "not-an-email" }
+    }))
+    .await;
+    assert_eq!(status, 200);
+    assert!(!resp.html.is_empty(), "Should still render HTML");
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "basics.email");
+}
+
+#[tokio::test]
+async fn validates_invalid_url() {
+    let (status, resp) = post_render(&serde_json::json!({
+        "basics": { "url": "not-a-url" }
+    }))
+    .await;
+    assert_eq!(status, 200);
+    assert!(!resp.html.is_empty());
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "basics.url");
+}
+
+#[tokio::test]
+async fn validates_work_url() {
+    let (_, resp) = post_render(&serde_json::json!({
+        "work": [{ "url": "ftp://invalid" }]
+    }))
+    .await;
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "work[0].url");
+}
+
+#[tokio::test]
+async fn validates_end_date_before_start_date() {
+    let (status, resp) = post_render(&serde_json::json!({
+        "work": [{
+            "position": "Engineer",
+            "startDate": "2024-06",
+            "endDate": "2023-01"
+        }]
+    }))
+    .await;
+    assert_eq!(status, 200);
+    assert!(!resp.html.is_empty(), "Should still render HTML despite errors");
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "work[0].endDate");
+    assert_eq!(resp.errors[0].code, "end_date_before_start");
+}
+
+#[tokio::test]
+async fn valid_resume_has_no_errors() {
+    let (_, resp) = post_render(&serde_json::json!({
+        "basics": {
+            "email": "jane@example.com",
+            "url": "https://example.com"
+        },
+        "work": [{
+            "url": "https://company.com",
+            "startDate": "2020-01",
+            "endDate": "2024-01"
+        }]
+    }))
+    .await;
+    assert!(resp.errors.is_empty(), "Valid resume should have no errors");
+}
+
+#[tokio::test]
+async fn multiple_validation_errors() {
+    let (_, resp) = post_render(&serde_json::json!({
+        "basics": {
+            "email": "bad",
+            "url": "bad"
+        },
+        "work": [{ "url": "bad" }]
+    }))
+    .await;
+    assert_eq!(resp.errors.len(), 3);
+}
+
+#[tokio::test]
+async fn validates_end_date_without_start_date() {
+    let (status, resp) = post_render(&serde_json::json!({
+        "work": [{
+            "position": "Engineer",
+            "endDate": "2023-06"
+        }]
+    }))
+    .await;
+    assert_eq!(status, 200);
+    assert!(!resp.html.is_empty(), "Should still render HTML despite errors");
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "work[0].endDate");
+    assert_eq!(resp.errors[0].code, "end_date_without_start");
+}
+
+#[tokio::test]
+async fn validates_url_without_host() {
+    let (_, resp) = post_render(&serde_json::json!({
+        "basics": { "url": "https://" }
+    }))
+    .await;
+    assert_eq!(resp.errors.len(), 1);
+    assert_eq!(resp.errors[0].field, "basics.url");
+    assert_eq!(resp.errors[0].code, "invalid_url");
 }

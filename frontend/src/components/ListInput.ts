@@ -1,18 +1,12 @@
 import { html } from "htm/preact";
 import { useRef, useState } from "preact/hooks";
+import { move } from "./utils.js";
 import { t } from "../i18n.js";
 
 interface ListInputProps {
   items: string[];
   onChange: (items: string[]) => void;
   placeholder?: string;
-}
-
-function move(arr: string[], from: number, to: number): string[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function ListInput({ items, onChange, placeholder }: ListInputProps) {

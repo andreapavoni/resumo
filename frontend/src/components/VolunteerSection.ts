@@ -1,34 +1,16 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
+import { update, val, move, autoResize, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Volunteer } from "../types.js";
+import type { Volunteer, ValidationError } from "../types.js";
 
 interface VolunteerSectionProps {
   volunteer: Volunteer[];
+  errors: ValidationError[];
   onChange: (volunteer: Volunteer[]) => void;
 }
 
-function update(volunteer: Volunteer[], index: number, patch: Partial<Volunteer>): Volunteer[] {
-  return volunteer.map((v, i) => (i === index ? { ...v, ...patch } : v));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function VolunteerSection({ volunteer, onChange }: VolunteerSectionProps) {
+export function VolunteerSection({ volunteer, errors, onChange }: VolunteerSectionProps) {
   function addEntry() {
     onChange([...volunteer, {}]);
   }
@@ -68,7 +50,9 @@ export function VolunteerSection({ volunteer, onChange }: VolunteerSectionProps)
             <label>
               ${t("volunteer.website")}
               <input type="url" value=${v.url ?? ""} placeholder=${t("volunteer.ph.website")}
+                class=${fieldError(errors, `volunteer[${i}].url`) ? "border-red-500" : ""}
                 onInput=${(e: Event) => onChange(update(volunteer, i, { url: val(e) }))} />
+              ${fieldError(errors, `volunteer[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `volunteer[${i}].url`)}</span>`}
             </label>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
@@ -81,8 +65,10 @@ export function VolunteerSection({ volunteer, onChange }: VolunteerSectionProps)
                   ${t("volunteer.endDate")}
                   <input type="month" value=${v.endDate ?? ""}
                     disabled=${v.endDate === undefined}
+                    class=${fieldError(errors, `volunteer[${i}].endDate`) ? "border-red-500" : ""}
                     onChange=${(e: Event) => onChange(update(volunteer, i, { endDate: val(e) }))} />
                 </label>
+                ${fieldError(errors, `volunteer[${i}].endDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `volunteer[${i}].endDate`)}</span>`}
                 <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${v.endDate === undefined}
                     onChange=${(e: Event) => {

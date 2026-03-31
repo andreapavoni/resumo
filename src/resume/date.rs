@@ -3,6 +3,18 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
+#[derive(Debug, thiserror::Error)]
+pub enum DateParseError {
+    #[error("invalid date format: {0:?}")]
+    InvalidFormat(String),
+    #[error("invalid year: {0:?}")]
+    InvalidYear(String),
+    #[error("invalid month: {0:?}")]
+    InvalidMonth(String),
+    #[error("date out of range: {0:?}")]
+    OutOfRange(String),
+}
+
 /// A year-month date as used in the JSON Resume schema.
 ///
 /// Serializes to `"YYYY-MM"` and deserializes from `"YYYY-MM"` or `"YYYY-MM-DD"`.
@@ -42,21 +54,21 @@ impl fmt::Display for ResumeDate {
 }
 
 impl FromStr for ResumeDate {
-    type Err = String;
+    type Err = DateParseError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         // Accept "YYYY-MM" or "YYYY-MM-DD"
         let parts: Vec<&str> = s.split('-').collect();
         if parts.len() < 2 {
-            return Err(format!("invalid date format: {s}"));
+            return Err(DateParseError::InvalidFormat(s.to_string()));
         }
         let year: u16 = parts[0]
             .parse()
-            .map_err(|_| format!("invalid year: {}", parts[0]))?;
+            .map_err(|_| DateParseError::InvalidYear(parts[0].to_string()))?;
         let month: u8 = parts[1]
             .parse()
-            .map_err(|_| format!("invalid month: {}", parts[1]))?;
-        ResumeDate::new(year, month).ok_or_else(|| format!("date out of range: {s}"))
+            .map_err(|_| DateParseError::InvalidMonth(parts[1].to_string()))?;
+        ResumeDate::new(year, month).ok_or_else(|| DateParseError::OutOfRange(s.to_string()))
     }
 }
 

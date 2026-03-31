@@ -1,10 +1,12 @@
 import { html } from "htm/preact";
 import { useRef } from "preact/hooks";
+import { val, autoResize, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Basics, Location, Profile } from "../types.js";
+import type { Basics, Location, Profile, ValidationError } from "../types.js";
 
 interface BasicsFormProps {
   basics: Basics;
+  errors: ValidationError[];
   onChange: (basics: Basics) => void;
 }
 
@@ -21,16 +23,7 @@ function updateProfile(basics: Basics, index: number, patch: Partial<Profile>): 
   return { ...basics, profiles };
 }
 
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-export function BasicsForm({ basics, onChange }: BasicsFormProps) {
+export function BasicsForm({ basics, errors, onChange }: BasicsFormProps) {
   const loc = basics.location ?? {};
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -87,7 +80,9 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
       <label>
         ${t("basics.email")}
         <input type="email" value=${basics.email ?? ""} placeholder=${t("basics.ph.email")}
+          class=${fieldError(errors, "basics.email") ? "border-red-500" : ""}
           onInput=${(e: Event) => onChange(set(basics, { email: val(e) }))} />
+        ${fieldError(errors, "basics.email") && html`<span class="text-red-500 text-xs">${fieldError(errors, "basics.email")}</span>`}
       </label>
       <label>
         ${t("basics.phone")}
@@ -97,7 +92,9 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
       <label>
         ${t("basics.website")}
         <input type="url" value=${basics.url ?? ""} placeholder=${t("basics.ph.website")}
+          class=${fieldError(errors, "basics.url") ? "border-red-500" : ""}
           onInput=${(e: Event) => onChange(set(basics, { url: val(e) }))} />
+        ${fieldError(errors, "basics.url") && html`<span class="text-red-500 text-xs">${fieldError(errors, "basics.url")}</span>`}
       </label>
       <div class="flex flex-col sm:flex-row gap-3">
         <label>
@@ -146,7 +143,9 @@ export function BasicsForm({ basics, onChange }: BasicsFormProps) {
               <label>
                 ${t("basics.url")}
                 <input type="url" value=${profile.url ?? ""} placeholder=${t("basics.ph.url")}
+                  class=${fieldError(errors, `basics.profiles[${i}].url`) ? "border-red-500" : ""}
                   onInput=${(e: Event) => onChange(updateProfile(basics, i, { url: val(e) }))} />
+                ${fieldError(errors, `basics.profiles[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `basics.profiles[${i}].url`)}</span>`}
               </label>
             </div>
           </div>

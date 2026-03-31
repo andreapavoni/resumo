@@ -1,26 +1,12 @@
 import { html } from "htm/preact";
 import { TagInput } from "./TagInput.js";
+import { update, val, move } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Interest } from "../types.js";
 
 interface InterestSectionProps {
   interests: Interest[];
   onChange: (interests: Interest[]) => void;
-}
-
-function update(interests: Interest[], index: number, patch: Partial<Interest>): Interest[] {
-  return interests.map((item, i) => (i === index ? { ...item, ...patch } : item));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function InterestSection({ interests, onChange }: InterestSectionProps) {

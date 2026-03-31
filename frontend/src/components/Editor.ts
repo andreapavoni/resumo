@@ -15,10 +15,12 @@ import { t } from "../i18n.js";
 import type {
   Resume, Basics, Work, Volunteer, Education, Award, Certificate,
   Publication, Skill, Language, Interest, Reference, Project,
+  ValidationError,
 } from "../types.js";
 
 interface EditorProps {
   resume: Resume;
+  errors: ValidationError[];
   onChange: (resume: Resume) => void;
   onImport: () => void;
   onExport: () => void;
@@ -26,7 +28,7 @@ interface EditorProps {
   onReset: () => void;
 }
 
-export function Editor({ resume, onChange, onImport, onExport, onLoadDemo, onReset }: EditorProps) {
+export function Editor({ resume, errors, onChange, onImport, onExport, onLoadDemo, onReset }: EditorProps) {
   const isEmpty = !resume.basics?.name && !resume.work?.length;
 
   return html`
@@ -57,18 +59,22 @@ export function Editor({ resume, onChange, onImport, onExport, onLoadDemo, onRes
       </div>
       <${BasicsForm}
         basics=${resume.basics ?? {}}
+        errors=${errors.filter(e => e.field.startsWith("basics."))}
         onChange=${(basics: Basics) => onChange({ ...resume, basics })}
       />
       <${WorkSection}
         work=${resume.work ?? []}
+        errors=${errors.filter(e => e.field.startsWith("work["))}
         onChange=${(work: Work[]) => onChange({ ...resume, work })}
       />
       <${VolunteerSection}
         volunteer=${resume.volunteer ?? []}
+        errors=${errors.filter(e => e.field.startsWith("volunteer["))}
         onChange=${(volunteer: Volunteer[]) => onChange({ ...resume, volunteer })}
       />
       <${EducationSection}
         education=${resume.education ?? []}
+        errors=${errors.filter(e => e.field.startsWith("education["))}
         onChange=${(education: Education[]) => onChange({ ...resume, education })}
       />
       <${AwardSection}
@@ -77,10 +83,12 @@ export function Editor({ resume, onChange, onImport, onExport, onLoadDemo, onRes
       />
       <${CertificateSection}
         certificates=${resume.certificates ?? []}
+        errors=${errors.filter(e => e.field.startsWith("certificates["))}
         onChange=${(certificates: Certificate[]) => onChange({ ...resume, certificates })}
       />
       <${PublicationSection}
         publications=${resume.publications ?? []}
+        errors=${errors.filter(e => e.field.startsWith("publications["))}
         onChange=${(publications: Publication[]) => onChange({ ...resume, publications })}
       />
       <${SkillSection}
@@ -101,6 +109,7 @@ export function Editor({ resume, onChange, onImport, onExport, onLoadDemo, onRes
       />
       <${ProjectSection}
         projects=${resume.projects ?? []}
+        errors=${errors.filter(e => e.field.startsWith("projects["))}
         onChange=${(projects: Project[]) => onChange({ ...resume, projects })}
       />
     </div>

@@ -1,25 +1,11 @@
 import { html } from "htm/preact";
+import { update, val, move } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Language } from "../types.js";
 
 interface LanguageSectionProps {
   languages: Language[];
   onChange: (languages: Language[]) => void;
-}
-
-function update(languages: Language[], index: number, patch: Partial<Language>): Language[] {
-  return languages.map((l, i) => (i === index ? { ...l, ...patch } : l));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function LanguageSection({ languages, onChange }: LanguageSectionProps) {

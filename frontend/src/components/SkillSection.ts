@@ -1,26 +1,12 @@
 import { html } from "htm/preact";
 import { TagInput } from "./TagInput.js";
+import { update, val, move } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Skill } from "../types.js";
 
 interface SkillSectionProps {
   skills: Skill[];
   onChange: (skills: Skill[]) => void;
-}
-
-function update(skills: Skill[], index: number, patch: Partial<Skill>): Skill[] {
-  return skills.map((s, i) => (i === index ? { ...s, ...patch } : s));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function SkillSection({ skills, onChange }: SkillSectionProps) {

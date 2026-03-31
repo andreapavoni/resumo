@@ -1,3 +1,5 @@
+use serde::Deserialize;
+
 pub struct Translations {
     pub summary: &'static str,
     pub experience: &'static str,
@@ -15,6 +17,14 @@ pub struct Translations {
     pub publications: &'static str,
     pub interests: &'static str,
     pub references: &'static str,
+}
+
+#[derive(Debug, Clone, Copy, Default, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Locale {
+    #[default]
+    En,
+    It,
 }
 
 static EN: Translations = Translations {
@@ -55,9 +65,9 @@ static IT: Translations = Translations {
     references: "Referenze",
 };
 
-pub fn translations_for(locale: &str) -> &'static Translations {
+pub fn translations_for(locale: &Locale) -> &'static Translations {
     match locale {
-        "it" => &IT,
+        Locale::It => &IT,
         _ => &EN,
     }
 }

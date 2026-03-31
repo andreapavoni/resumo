@@ -129,3 +129,19 @@ export interface Skill {
   level?: string;
   keywords?: string[];
 }
+
+export type ErrorCode =
+  | "invalid_email"
+  | "invalid_url"
+  | "end_date_before_start"
+  | "end_date_without_start";
+
+export interface ValidationError {
+  field: string;
+  code: ErrorCode;
+}
+
+export interface RenderResult {
+  html: string;
+  errors: ValidationError[];
+}

@@ -1,35 +1,17 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
 import { TagInput } from "./TagInput.js";
+import { update, val, move, autoResize, fieldError } from "./utils.js";
 import { t } from "../i18n.js";
-import type { Project } from "../types.js";
+import type { Project, ValidationError } from "../types.js";
 
 interface ProjectSectionProps {
   projects: Project[];
+  errors: ValidationError[];
   onChange: (projects: Project[]) => void;
 }
 
-function update(projects: Project[], index: number, patch: Partial<Project>): Project[] {
-  return projects.map((p, i) => (i === index ? { ...p, ...patch } : p));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
-}
-
-export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
+export function ProjectSection({ projects, errors, onChange }: ProjectSectionProps) {
   function addEntry() {
     onChange([...projects, {}]);
   }
@@ -74,7 +56,9 @@ export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
             <label>
               ${t("projects.url")}
               <input type="url" value=${project.url ?? ""} placeholder=${t("projects.ph.url")}
+                class=${fieldError(errors, `projects[${i}].url`) ? "border-red-500" : ""}
                 onInput=${(e: Event) => onChange(update(projects, i, { url: val(e) }))} />
+              ${fieldError(errors, `projects[${i}].url`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `projects[${i}].url`)}</span>`}
             </label>
             <div class="flex flex-col sm:flex-row gap-3">
               <label>
@@ -87,8 +71,10 @@ export function ProjectSection({ projects, onChange }: ProjectSectionProps) {
                   ${t("projects.endDate")}
                   <input type="month" value=${project.endDate ?? ""}
                     disabled=${project.endDate === undefined}
+                    class=${fieldError(errors, `projects[${i}].endDate`) ? "border-red-500" : ""}
                     onChange=${(e: Event) => onChange(update(projects, i, { endDate: val(e) }))} />
                 </label>
+                ${fieldError(errors, `projects[${i}].endDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `projects[${i}].endDate`)}</span>`}
                 <label class="flex items-center gap-1.5 mt-1.5 text-xs text-gray-500 cursor-pointer">
                   <input type="checkbox" checked=${project.endDate === undefined}
                     onChange=${(e: Event) => {

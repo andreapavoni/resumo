@@ -1,11 +1,11 @@
-import type { Resume, Theme } from "./types.js";
+import type { RenderResult, Resume, Theme } from "./types.js";
 
 export async function renderResume(
   resume: Resume,
   theme: Theme = "classic",
   locale: string = "en",
   signal?: AbortSignal
-): Promise<string> {
+): Promise<RenderResult> {
   const response = await fetch(`/api/render?theme=${theme}&locale=${locale}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -15,5 +15,5 @@ export async function renderResume(
   if (!response.ok) {
     throw new Error(`Render failed: ${response.status}`);
   }
-  return response.text();
+  return response.json();
 }

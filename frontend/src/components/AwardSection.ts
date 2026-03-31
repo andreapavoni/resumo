@@ -1,30 +1,11 @@
 import { html } from "htm/preact";
+import { update, val, move, autoResize } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Award } from "../types.js";
 
 interface AwardSectionProps {
   awards: Award[];
   onChange: (awards: Award[]) => void;
-}
-
-function update(awards: Award[], index: number, patch: Partial<Award>): Award[] {
-  return awards.map((a, i) => (i === index ? { ...a, ...patch } : a));
-}
-
-function val(e: Event): string {
-  return (e.target as HTMLInputElement).value;
-}
-
-function autoResize(el: HTMLTextAreaElement) {
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
-}
-
-function move<T>(arr: T[], from: number, to: number): T[] {
-  const result = [...arr];
-  const [item] = result.splice(from, 1);
-  result.splice(to, 0, item);
-  return result;
 }
 
 export function AwardSection({ awards, onChange }: AwardSectionProps) {

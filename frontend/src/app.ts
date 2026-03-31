@@ -3,7 +3,7 @@ import { useEffect, useState } from "preact/hooks";
 import { Editor } from "./components/Editor.js";
 import { Preview } from "./components/Preview.js";
 import { t, setLocale, SUPPORTED_LOCALES, type Locale } from "./i18n.js";
-import type { Resume, Theme } from "./types.js";
+import type { Resume, Theme, ValidationError } from "./types.js";
 
 const STORAGE_KEY = "resumo:resume";
 const THEME_KEY = "resumo:theme";
@@ -68,6 +68,7 @@ export function App() {
   const [theme, setTheme] = useState<Theme>(() => loadState(THEME_KEY, "classic"));
   const [locale, setLocaleState] = useState<Locale>(() => loadState(LOCALE_KEY, "en"));
   const [activeTab, setActiveTab] = useState<"edit" | "preview">("edit");
+  const [errors, setErrors] = useState<ValidationError[]>([]);
 
   // Sync module-level locale so t() calls in child components pick it up
   setLocale(locale);
@@ -165,6 +166,7 @@ export function App() {
         <div class="no-print md:fixed md:left-0 md:top-16 md:w-[45%] md:h-[calc(100vh-7rem)] md:overflow-y-auto md:border-r-2 md:border-black p-4 md:p-6 bg-appbg ${activeTab === "edit" ? "" : "hidden md:block"}">
           <${Editor}
             resume=${resume}
+            errors=${errors}
             onChange=${setResume}
             onImport=${() => importJson(setResume)}
             onExport=${() => exportJson(resume)}
@@ -182,7 +184,7 @@ export function App() {
         </div>
         <!-- Preview pane -->
         <div class="preview-pane md:ml-[45%] p-4 md:p-8 md:pb-12 ${activeTab === "preview" ? "" : "hidden md:block"}">
-          <${Preview} resume=${resume} theme=${theme} locale=${locale} onLoadDemo=${() => loadDemo(setResume)} />
+          <${Preview} resume=${resume} theme=${theme} locale=${locale} onLoadDemo=${() => loadDemo(setResume)} onErrors=${setErrors} />
         </div>
       </div>
 
