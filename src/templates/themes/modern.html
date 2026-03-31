@@ -170,6 +170,20 @@
 	.resume .entry h3 a:hover {
 		text-decoration: underline;
 	}
+
+	@media print {
+		/*
+		 * box-decoration-break: clone causes padding and background to be
+		 * reapplied on every page fragment. This means the sidebar stripe
+		 * (background + padding-top) reappears at the top of each continued
+		 * page, giving content breathing room without relying on page margins.
+		 */
+		.resume .sidebar,
+		.resume .main {
+			-webkit-box-decoration-break: clone;
+			box-decoration-break: clone;
+		}
+	}
 </style>
 <article class="resume">
 	<aside class="sidebar">

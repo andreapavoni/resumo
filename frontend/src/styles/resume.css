@@ -33,20 +33,10 @@
     break-inside: avoid;
   }
 
-  section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
   h2,
   h3 {
     page-break-after: avoid;
     break-after: avoid;
-  }
-
-  ul {
-    page-break-inside: avoid;
-    break-inside: avoid;
   }
 
   p,
