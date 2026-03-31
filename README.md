@@ -41,6 +41,23 @@ cargo build --release
 ./target/release/resumo        # serves everything on http://127.0.0.1:3000
 ```
 
+## Docker
+
+**Pull from Docker Hub:**
+
+```bash
+docker run -p 3000:3000 andreapavoni/resumo
+```
+
+**Build locally:**
+
+```bash
+docker build -t resumo .
+docker run -p 3000:3000 resumo
+```
+
+Open http://localhost:3000.
+
 ## Tests
 
 ```bash
