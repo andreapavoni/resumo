@@ -1,7 +1,14 @@
+//! Data models for the [JSON Resume](https://jsonresume.org/schema) schema.
+//!
+//! All structs derive `Default` so partial documents deserialize cleanly;
+//! every field is `Option` to match the schema's "all fields optional" rule.
+//! Field names follow the schema's camelCase convention via `#[serde(rename_all = "camelCase")]`.
+
 use serde::{Deserialize, Serialize};
 
 use super::date::ResumeDate;
 
+/// Root type representing a complete or partial JSON Resume document.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Resume {

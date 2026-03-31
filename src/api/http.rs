@@ -6,6 +6,15 @@ use tower_http::services::{ServeDir, ServeFile};
 use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
+/// Starts the HTTP server and blocks until it exits.
+///
+/// Routes:
+/// - `POST /api/render` — render a JSON Resume document (see [`super::handlers::render_resume`])
+/// - `GET /app` — serves the editor SPA entry point
+/// - Everything else — served from the `static/` directory, falling back to the SPA
+///
+/// The bind address is `0.0.0.0:{PORT}` where `PORT` is read from the environment
+/// (defaults to `3000`).
 pub async fn start() -> Result<()> {
     let router = Router::new()
         .route("/api/render", post(super::handlers::render_resume))

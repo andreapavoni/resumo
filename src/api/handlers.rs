@@ -8,11 +8,14 @@ use crate::{
     resume::{models::Resume, validate::ValidationError},
 };
 
+/// Available resume themes. Passed as a `?theme=` query parameter.
 #[derive(Debug, Clone, Copy, Default, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum Theme {
+    /// Single-column classic layout. Default.
     #[default]
     Classic,
+    /// Two-column layout with a sidebar.
     Modern,
 }
 
@@ -56,12 +59,29 @@ macro_rules! sort_by_date_desc {
     };
 }
 
+/// Response body for `POST /api/render`.
+///
+/// Always returns `200 OK` — errors are embedded in the response rather than
+/// mapped to HTTP error codes so the frontend can display the live preview
+/// alongside any validation messages.
 #[derive(Serialize)]
 pub struct RenderResponse {
+    /// Rendered HTML fragment for the resume.
     pub html: String,
+    /// Validation errors found in the submitted resume. Empty when valid.
     pub errors: Vec<ValidationError>,
 }
 
+/// Renders a JSON Resume document to HTML.
+///
+/// Accepts an optional `?theme=` query parameter (defaults to `classic`) and
+/// an optional `?locale=` parameter (defaults to `en`).
+///
+/// Entries in date-bearing sections (`work`, `education`, `volunteer`, `projects`,
+/// `publications`, `awards`, `certificates`) are sorted newest-first before rendering.
+///
+/// Validation runs alongside rendering; both results are returned in the response
+/// regardless of whether errors were found.
 pub async fn render_resume(
     Query(query): Query<RenderQuery>,
     Json(mut resume): Json<Resume>,

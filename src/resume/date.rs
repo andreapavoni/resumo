@@ -5,10 +5,14 @@ use std::str::FromStr;
 use chrono::{Datelike, NaiveDate};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
+/// Error returned when a date string cannot be parsed into a [`ResumeDate`].
 #[derive(Debug, thiserror::Error)]
 pub enum DateParseError {
+    /// The string does not have a recognisable structure (`"YYYY-MM"` or `"YYYY-MM-DD"`).
     #[error("invalid date format: {0:?}")]
     InvalidFormat(String),
+    /// The string has the right structure but contains out-of-range values
+    /// (e.g. month 13, or a day that doesn't exist in that month).
     #[error("invalid date: {0:?}")]
     InvalidDate(String),
 }
@@ -18,8 +22,8 @@ pub enum DateParseError {
 /// Deserializes from `"YYYY-MM"` or `"YYYY-MM-DD"`. Month-precision inputs
 /// (`"YYYY-MM"`) store day=1 internally.
 ///
-/// - [`as_start`] returns the date as the beginning of its period (day=1 for month-precision).
-/// - [`as_end`] returns the date as the end of its period (last day of month for month-precision).
+/// - [`Self::as_start`] returns the date as the beginning of its period (day=1 for month-precision).
+/// - [`Self::as_end`] returns the date as the end of its period (last day of month for month-precision).
 ///
 /// Serializes back to `"YYYY-MM"` or `"YYYY-MM-DD"` preserving original precision.
 /// Displays as `"Nov 2024"` for human-readable output.
@@ -30,6 +34,8 @@ pub struct ResumeDate {
 }
 
 impl ResumeDate {
+    /// Creates a month-precision date (day stored as 1 internally).
+    /// Returns `None` if `month` is outside `1..=12` or `year` is 0.
     pub fn new(year: u16, month: u8) -> Option<Self> {
         NaiveDate::from_ymd_opt(year as i32, month as u32, 1).map(|date| Self {
             date,
@@ -208,7 +214,7 @@ mod tests {
     #[test]
     fn display_format() {
         let d = ResumeDate::new(2024, 11).unwrap();
-        assert_eq!(d.to_string(), "Nov 2024");
+        assert_eq!(format!("{d}"), "Nov 2024");
     }
 
     #[test]

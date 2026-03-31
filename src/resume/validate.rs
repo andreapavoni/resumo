@@ -1,25 +1,52 @@
+//! Resume validation: checks fields for correctness and returns structured errors.
+//!
+//! Validation is **non-blocking** — [`Resume::validate`] always returns a
+//! (possibly empty) list of errors rather than short-circuiting. The caller
+//! renders the resume and returns errors alongside the HTML so the preview
+//! stays live while the user corrects mistakes.
+
 use serde::Serialize;
 use url::Url;
 
 use super::date::ResumeDate;
 use super::models::Resume;
 
+/// Machine-readable code identifying the kind of validation failure.
+///
+/// Serialises as snake_case (e.g. `"invalid_email"`) so the frontend
+/// can look up a localised message via `t("error.<code>")`.
 #[derive(Debug, Clone, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ErrorCode {
+    /// The email address is missing an `@`, an empty local part, or a domain without a dot.
     InvalidEmail,
+    /// The URL does not use `http`/`https` or has no host component.
     InvalidUrl,
+    /// `endDate` is earlier than `startDate` (compared using period-boundary semantics).
     EndDateBeforeStart,
+    /// `endDate` is present but `startDate` is absent.
     EndDateWithoutStart,
 }
 
+/// A single validation failure on a specific field.
 #[derive(Debug, Clone, Serialize)]
 pub struct ValidationError {
+    /// Dot/bracket path to the offending field (e.g. `"basics.email"`, `"work[0].url"`).
     pub field: String,
+    /// The kind of error.
     pub code: ErrorCode,
 }
 
 impl Resume {
+    /// Validates the resume and returns all errors found.
+    ///
+    /// Checks performed:
+    /// - `basics.email` — basic email format
+    /// - All `url` fields — must use `http`/`https` with a valid host
+    /// - Date ranges (`work`, `volunteer`, `education`, `projects`) — end must not precede start;
+    ///   end date without a start date is also an error
+    ///
+    /// Returns an empty `Vec` when the resume is valid.
     pub fn validate(&self) -> Vec<ValidationError> {
         let mut errors = Vec::new();
 
