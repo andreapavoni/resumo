@@ -1,14 +1,6 @@
 # Build backend
-FROM lukemathwalker/cargo-chef:latest-rust-1 AS chef
+FROM rust:1-slim AS backend
 WORKDIR /app
-
-FROM chef AS planner
-COPY . .
-RUN cargo chef prepare --recipe-path recipe.json
-
-FROM chef AS builder
-COPY --from=planner /app/recipe.json recipe.json
-RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release --bin resumo
 
@@ -20,7 +12,7 @@ RUN npm ci
 COPY frontend ./
 RUN npm run build
 
-# Final runtime
+# Runtime
 FROM bitnami/minideb:trixie
 RUN apt-get update && \
     apt-get install -y ca-certificates && \
@@ -29,6 +21,6 @@ RUN useradd -m resumo
 USER resumo
 
 WORKDIR /app
-COPY --from=builder /app/target/release/resumo /usr/local/bin
+COPY --from=backend /app/target/release/resumo /usr/local/bin
 COPY --from=frontend /app/static ./static
 ENTRYPOINT ["/usr/local/bin/resumo"]
