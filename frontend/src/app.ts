@@ -40,13 +40,15 @@ function importJson(setResume: (r: Resume) => void) {
 }
 
 function exportJson(resume: Resume) {
+  const name = resume.basics?.name?.trim();
+  const slug = name ? name.replace(/\s+/g, "_") : "resume";
   const blob = new Blob([JSON.stringify(resume, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "resume.json";
+  a.download = `${slug}_resume.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -149,7 +151,18 @@ export function App() {
 
             <button
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
-              onClick=${() => window.print()}
+              onClick=${() => {
+                const name = resume.basics?.name?.trim();
+                if (name) {
+                  const prev = document.title;
+                  document.title = name;
+                  window.onafterprint = () => {
+                    document.title = prev;
+                    window.onafterprint = null;
+                  };
+                }
+                window.print();
+              }}
               title=${t("app.printToPdf")}
               aria-label=${t("app.printToPdf")}
             >

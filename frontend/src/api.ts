@@ -13,7 +13,7 @@ export async function renderResume(
     signal,
   });
   if (!response.ok) {
-    throw new Error(`Render failed: ${response.status}`);
+    throw new Error(`Render failed: ${response.status} ${JSON.stringify(response)}`);
   }
   return response.json();
 }
