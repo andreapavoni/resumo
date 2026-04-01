@@ -159,6 +159,23 @@ impl<'de> Deserialize<'de> for ResumeDate {
     }
 }
 
+/// Lenient deserializer for `Option<ResumeDate>` fields in the data model.
+///
+/// Unlike the standard `Option<ResumeDate>` deserialization, invalid date strings
+/// (e.g. `"2026"` instead of `"2026-01"`) are silently converted to `None` rather
+/// than rejecting the whole request with a 422. This means a broken import still
+/// produces a preview — just with the offending date missing — instead of a silent
+/// failure in the UI.
+///
+/// Apply with `#[serde(deserialize_with = "super::date::deserialize_optional")]`.
+pub fn deserialize_optional<'de, D>(deserializer: D) -> Result<Option<ResumeDate>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let opt: Option<String> = Option::deserialize(deserializer)?;
+    Ok(opt.and_then(|s| s.parse().ok()))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

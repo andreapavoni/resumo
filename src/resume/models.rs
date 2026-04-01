@@ -66,7 +66,9 @@ pub struct Work {
     pub description: Option<String>,
     pub position: Option<String>,
     pub url: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub start_date: Option<ResumeDate>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub end_date: Option<ResumeDate>,
     pub summary: Option<String>,
     pub highlights: Option<Vec<String>>,
@@ -78,7 +80,9 @@ pub struct Volunteer {
     pub organization: Option<String>,
     pub position: Option<String>,
     pub url: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub start_date: Option<ResumeDate>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub end_date: Option<ResumeDate>,
     pub summary: Option<String>,
     pub highlights: Option<Vec<String>>,
@@ -91,7 +95,9 @@ pub struct Education {
     pub url: Option<String>,
     pub area: Option<String>,
     pub study_type: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub start_date: Option<ResumeDate>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub end_date: Option<ResumeDate>,
     pub score: Option<String>,
     pub courses: Option<Vec<String>>,
@@ -101,6 +107,7 @@ pub struct Education {
 #[serde(rename_all = "camelCase")]
 pub struct Award {
     pub title: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub date: Option<ResumeDate>,
     pub awarder: Option<String>,
     pub summary: Option<String>,
@@ -110,6 +117,7 @@ pub struct Award {
 #[serde(rename_all = "camelCase")]
 pub struct Certificate {
     pub name: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub date: Option<ResumeDate>,
     pub url: Option<String>,
     pub issuer: Option<String>,
@@ -120,6 +128,7 @@ pub struct Certificate {
 pub struct Publication {
     pub name: Option<String>,
     pub publisher: Option<String>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub release_date: Option<ResumeDate>,
     pub url: Option<String>,
     pub summary: Option<String>,
@@ -153,7 +162,9 @@ pub struct Project {
     pub description: Option<String>,
     pub highlights: Option<Vec<String>>,
     pub keywords: Option<Vec<String>>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub start_date: Option<ResumeDate>,
+    #[serde(deserialize_with = "super::date::deserialize_optional")]
     pub end_date: Option<ResumeDate>,
     pub url: Option<String>,
     pub roles: Option<Vec<String>>,

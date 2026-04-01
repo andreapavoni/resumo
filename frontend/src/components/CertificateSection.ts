@@ -1,5 +1,5 @@
 import { html } from "htm/preact";
-import { update, val, move, fieldError } from "./utils.js";
+import { update, val, move, fieldError, hasItemErrors } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Certificate, ValidationError } from "../types.js";
 
@@ -23,7 +23,7 @@ export function CertificateSection({ certificates, errors, onChange }: Certifica
       <legend>${t("certificates.legend")}</legend>
       ${certificates.map(
         (cert, i) => html`
-          <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
+          <div class=${"border-2 rounded-sm p-3 mb-3 " + (hasItemErrors(errors, `certificates[${i}]`) ? "border-red-400 bg-red-50" : "border-black/60 bg-appbg")} key=${i}>
             <div class="flex justify-between items-center mb-2">
               <h3 class="font-bold text-xs uppercase tracking-wide">${t("certificates.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">

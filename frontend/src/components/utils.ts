@@ -25,3 +25,7 @@ export function fieldError(errors: ValidationError[], field: string): string | u
   const err = errors.find((e) => e.field === field);
   return err ? t(`error.${err.code}`) : undefined;
 }
+
+export function hasItemErrors(errors: ValidationError[], prefix: string): boolean {
+  return errors.some((e) => e.field.startsWith(prefix));
+}

@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
-import { update, val, move, autoResize, fieldError } from "./utils.js";
+import { update, val, move, autoResize, fieldError, hasItemErrors } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Volunteer, ValidationError } from "../types.js";
 
@@ -24,7 +24,7 @@ export function VolunteerSection({ volunteer, errors, onChange }: VolunteerSecti
       <legend>${t("volunteer.legend")}</legend>
       ${volunteer.map(
         (v, i) => html`
-          <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
+          <div class=${"border-2 rounded-sm p-3 mb-3 " + (hasItemErrors(errors, `volunteer[${i}]`) ? "border-red-400 bg-red-50" : "border-black/60 bg-appbg")} key=${i}>
             <div class="flex justify-between items-center mb-2">
               <h3 class="font-bold text-xs uppercase tracking-wide">${t("volunteer.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">
@@ -58,7 +58,9 @@ export function VolunteerSection({ volunteer, errors, onChange }: VolunteerSecti
               <label>
                 ${t("volunteer.startDate")}
                 <input type="month" value=${v.startDate ?? ""}
+                  class=${fieldError(errors, `volunteer[${i}].startDate`) ? "border-red-500" : ""}
                   onChange=${(e: Event) => onChange(update(volunteer, i, { startDate: val(e) }))} />
+                ${fieldError(errors, `volunteer[${i}].startDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `volunteer[${i}].startDate`)}</span>`}
               </label>
               <div class="flex-1">
                 <label>

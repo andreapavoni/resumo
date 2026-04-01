@@ -1,6 +1,6 @@
 import { html } from "htm/preact";
 import { ListInput } from "./ListInput.js";
-import { update, val, move, fieldError } from "./utils.js";
+import { update, val, move, fieldError, hasItemErrors } from "./utils.js";
 import { t } from "../i18n.js";
 import type { Education, ValidationError } from "../types.js";
 
@@ -24,7 +24,7 @@ export function EducationSection({ education, errors, onChange }: EducationSecti
       <legend>${t("education.legend")}</legend>
       ${education.map(
         (edu, i) => html`
-          <div class="border-2 border-black/60 rounded-sm p-3 mb-3 bg-appbg" key=${i}>
+          <div class=${"border-2 rounded-sm p-3 mb-3 " + (hasItemErrors(errors, `education[${i}]`) ? "border-red-400 bg-red-50" : "border-black/60 bg-appbg")} key=${i}>
             <div class="flex justify-between items-center mb-2">
               <h3 class="font-bold text-xs uppercase tracking-wide">${t("education.entry")} #${i + 1}</h3>
               <div class="flex gap-1 items-center">
@@ -65,7 +65,9 @@ export function EducationSection({ education, errors, onChange }: EducationSecti
               <label>
                 ${t("education.startDate")}
                 <input type="month" value=${edu.startDate ?? ""}
+                  class=${fieldError(errors, `education[${i}].startDate`) ? "border-red-500" : ""}
                   onChange=${(e: Event) => onChange(update(education, i, { startDate: val(e) }))} />
+                ${fieldError(errors, `education[${i}].startDate`) && html`<span class="text-red-500 text-xs">${fieldError(errors, `education[${i}].startDate`)}</span>`}
               </label>
               <div class="flex-1">
                 <label>
