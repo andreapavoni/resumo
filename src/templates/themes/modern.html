@@ -315,12 +315,12 @@
 					</h3>
 					<p class="date-range">
 						{% match job.start_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}
 						{% endmatch %}
 						–
 						{% match job.end_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
@@ -361,12 +361,12 @@
 					{% if proj.start_date.is_some() || proj.end_date.is_some() %}
 					<p class="date-range">
 						{% match proj.start_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}
 						{% endmatch %}
 						–
 						{% match proj.end_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
@@ -412,12 +412,12 @@
 					{% endif %}
 					<p class="date-range">
 						{% match edu.start_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}
 						{% endmatch %}
 						–
 						{% match edu.end_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
@@ -446,12 +446,12 @@
 					</h3>
 					<p class="date-range">
 						{% match vol.start_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}
 						{% endmatch %}
 						–
 						{% match vol.end_date %}
-						{% when Some with (d) %}<time>{{ d }}</time>
+						{% when Some with (d) %}<time>{{ d.format_localized(t) }}</time>
 						{% when None %}{{ t.present }}
 						{% endmatch %}
 					</p>
@@ -484,7 +484,7 @@
 					<p class="date-range">
 						{% if let Some(awarder) = award.awarder %}{{ awarder }}{% endif %}
 						{% if award.awarder.is_some() && award.date.is_some() %} · {% endif %}
-						{% if let Some(d) = award.date %}<time>{{ d }}</time>{% endif %}
+						{% if let Some(d) = award.date %}<time>{{ d.format_localized(t) }}</time>{% endif %}
 					</p>
 					{% endif %}
 				</header>
@@ -515,7 +515,7 @@
 					<p class="date-range">
 						{% if let Some(issuer) = cert.issuer %}{{ issuer }}{% endif %}
 						{% if cert.issuer.is_some() && cert.date.is_some() %} · {% endif %}
-						{% if let Some(d) = cert.date %}<time>{{ d }}</time>{% endif %}
+						{% if let Some(d) = cert.date %}<time>{{ d.format_localized(t) }}</time>{% endif %}
 					</p>
 					{% endif %}
 				</header>
@@ -543,7 +543,7 @@
 					<p class="date-range">
 						{% if let Some(publisher) = pub_.publisher %}{{ publisher }}{% endif %}
 						{% if pub_.publisher.is_some() && pub_.release_date.is_some() %} · {% endif %}
-						{% if let Some(d) = pub_.release_date %}<time>{{ d }}</time>{% endif %}
+						{% if let Some(d) = pub_.release_date %}<time>{{ d.format_localized(t) }}</time>{% endif %}
 					</p>
 					{% endif %}
 				</header>

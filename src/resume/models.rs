@@ -8,6 +8,17 @@ use serde::{Deserialize, Serialize};
 
 use super::date::ResumeDate;
 
+/// App-specific metadata stored inside the JSON export.
+/// Not part of the official JSON Resume schema, but `additionalProperties: true`
+/// at the schema root means it round-trips through validators safely.
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct Meta {
+    /// BCP 47-style locale code (e.g. `"en"`, `"it"`) used when the document was exported.
+    /// Resumo reads this on import to restore the UI language automatically.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locale: Option<String>,
+}
+
 /// Root type representing a complete or partial JSON Resume document.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -24,6 +35,8 @@ pub struct Resume {
     pub interests: Option<Vec<Interest>>,
     pub references: Option<Vec<Reference>>,
     pub projects: Option<Vec<Project>>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meta: Option<Meta>,
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

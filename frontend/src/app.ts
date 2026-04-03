@@ -2,7 +2,7 @@ import { html } from "htm/preact";
 import { useEffect, useState } from "preact/hooks";
 import { Editor } from "./components/Editor.js";
 import { Preview } from "./components/Preview.js";
-import { t, setLocale, SUPPORTED_LOCALES, type Locale } from "./i18n.js";
+import { t, setLocale, getLocale, SUPPORTED_LOCALES, type Locale } from "./i18n.js";
 import type { Resume, Theme, ValidationError } from "./types.js";
 
 const STORAGE_KEY = "resumo:resume";
@@ -18,7 +18,7 @@ function loadState<T>(key: string, fallback: T): T {
   }
 }
 
-function importJson(setResume: (r: Resume) => void) {
+function importJson(setResume: (r: Resume) => void, setLocaleState: (l: Locale) => void) {
   const input = document.createElement("input");
   input.type = "file";
   input.accept = ".json,application/json";
@@ -30,6 +30,10 @@ function importJson(setResume: (r: Resume) => void) {
       try {
         const resume = JSON.parse(reader.result as string) as Resume;
         setResume(resume);
+        const metaLocale = resume.meta?.locale;
+        if (metaLocale && SUPPORTED_LOCALES.some(l => l.code === metaLocale)) {
+          setLocaleState(metaLocale as Locale);
+        }
       } catch {
         alert(t("app.invalidJson"));
       }
@@ -40,15 +44,17 @@ function importJson(setResume: (r: Resume) => void) {
 }
 
 function exportJson(resume: Resume) {
+  const locale = getLocale();
   const name = resume.basics?.name?.trim();
   const slug = name ? name.replace(/\s+/g, "_") : "resume";
-  const blob = new Blob([JSON.stringify(resume, null, 2)], {
+  const data = { ...resume, meta: { ...(resume.meta ?? {}), locale } };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `${slug}_resume.json`;
+  a.download = `${slug}_resume_${locale}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -153,14 +159,13 @@ export function App() {
               class="flex items-center gap-2 hover:text-appaccent transition-colors"
               onClick=${() => {
                 const name = resume.basics?.name?.trim();
-                if (name) {
-                  const prev = document.title;
-                  document.title = name;
-                  window.onafterprint = () => {
-                    document.title = prev;
-                    window.onafterprint = null;
-                  };
-                }
+                const prev = document.title;
+                const slug = name ? name.replace(/\s+/g, "_") : "resume";
+                document.title = `${slug}_resume_${locale}`;
+                window.onafterprint = () => {
+                  document.title = prev;
+                  window.onafterprint = null;
+                };
                 window.print();
               }}
               title=${t("app.printToPdf")}
@@ -181,7 +186,7 @@ export function App() {
             resume=${resume}
             errors=${errors}
             onChange=${setResume}
-            onImport=${() => importJson(setResume)}
+            onImport=${() => importJson(setResume, setLocaleState)}
             onExport=${() => exportJson(resume)}
             onLoadDemo=${() => loadDemo(setResume)}
             onReset=${() => {

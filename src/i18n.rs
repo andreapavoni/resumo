@@ -27,6 +27,8 @@ pub struct Translations {
     pub publications: &'static str,
     pub interests: &'static str,
     pub references: &'static str,
+    /// Abbreviated month names, Jan–Dec (indices 0–11).
+    pub months: [&'static str; 12],
 }
 
 /// Supported render locales. Passed as a `?locale=` query parameter.
@@ -56,6 +58,7 @@ static EN: Translations = Translations {
     publications: "Publications",
     interests: "Interests",
     references: "References",
+    months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 };
 
 static IT: Translations = Translations {
@@ -75,6 +78,7 @@ static IT: Translations = Translations {
     publications: "Pubblicazioni",
     interests: "Interessi",
     references: "Referenze",
+    months: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
 };
 
 /// Returns the static [`Translations`] for the given locale.

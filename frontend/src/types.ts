@@ -1,3 +1,7 @@
+export interface Meta {
+  locale?: string;
+}
+
 export interface Resume {
   basics?: Basics;
   work?: Work[];
@@ -11,6 +15,7 @@ export interface Resume {
   interests?: Interest[];
   references?: Reference[];
   projects?: Project[];
+  meta?: Meta;
 }
 
 export interface Basics {

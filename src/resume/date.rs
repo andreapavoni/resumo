@@ -3,6 +3,8 @@ use std::fmt;
 use std::str::FromStr;
 
 use chrono::{Datelike, NaiveDate};
+
+use crate::i18n::Translations;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 /// Error returned when a date string cannot be parsed into a [`ResumeDate`].
@@ -87,6 +89,14 @@ fn last_day_of_month(date: NaiveDate) -> NaiveDate {
         NaiveDate::from_ymd_opt(year, month + 1, 1)
     };
     first_of_next.and_then(|d| d.pred_opt()).unwrap_or(date)
+}
+
+impl ResumeDate {
+    /// Formats the date using the localized month abbreviation from `t`.
+    pub fn format_localized(&self, t: &Translations) -> String {
+        let month_name = t.months[(self.date.month() - 1) as usize];
+        format!("{} {}", month_name, self.date.year())
+    }
 }
 
 impl fmt::Display for ResumeDate {
